@@ -132,7 +132,7 @@ Console Commands:
   # Demo
 //--------------------------------------------
 
-		A C++ Demo using OBI:
+		// A C++ Demo using OBI:
 		
 		#include "common.h"
 		
@@ -170,7 +170,7 @@ Console Commands:
 
 //--------------------------------------------
 
-		A C++ Demo using OMMAP:
+		// A C++ Demo using OMMAP:
 		
 		#include <vector>
 		
