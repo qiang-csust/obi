@@ -94,7 +94,7 @@ Console Commands:
   
   -testsearch 1000 keyword1 keyword2 keyword3  
   
-  #repeat the search 1000 times
+  #repeat the search 1000 times for each keyword
    
   -del w 100
   
