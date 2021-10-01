@@ -27,6 +27,7 @@ Data files：
 
 # Indexing the Enron dataset
 
+Unzip "obi-enron.zip"
 
 Copy OBI.exe to the current directory.
 
@@ -34,12 +35,9 @@ Download "enron_mail_20150507.tgz" from "https://www.cs.cmu.edu/~./enron/"
 
 Copy the unzipped Enron dataset to "E:\OBindex\maildir"
 
-Unzip "obi-enron.zip"
-
 Run "createindex_enron.bat" to create a full plain-text inverted index.
 
 Run "search.bat" to enter the OBI console.
-
 
 # Usage:
 Run OBI.exe to enter a console.
