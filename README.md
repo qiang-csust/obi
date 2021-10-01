@@ -25,7 +25,7 @@ Data files：
    
    Full plain-text inverted index: the "enron" directory
 
-# Index the Enron dataset
+# Indexing the Enron dataset
 
 
 Copy OBI.exe to the current directory.
