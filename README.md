@@ -56,9 +56,9 @@ Run "search.bat" to enter an OBI console.
  
    #online-setup an existing inverted index
    
- obi --set-height 10 --max-size 10000 --max-m 1000
+ obi --load-inverted-index --set-height 23 --max-size 10000 --max-m 1000
  
-   #load a part of the existing plain-text inverted index into memory with L=10, N=1000, and m=1000.
+   #load a part of the existing plain-text inverted index into memory with L=23, N=1000, and m=1000.
    
  obi -load 
  
