@@ -46,7 +46,8 @@ Run "search.bat" to enter an OBI console.
    
  obi --create-inverted-index d:\\myDirectory -save
  
-   #save an inverted index
+   #create an oblivious inverted index and save the index
+   
  obi --load-inverted-index
  
    #load an existing inverted index into memory.
