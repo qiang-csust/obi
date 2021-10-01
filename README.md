@@ -42,11 +42,11 @@ Run "search.bat" to enter an OBI console.
 
  obi --create-inverted-index d:\\myDirectory
  
-   #create an inverted index from a full directory containing plain-text files.
+   #create a plain-text inverted index from a full directory containing plain-text files.
    
  obi --create-inverted-index d:\\myDirectory -save
  
-   #create an oblivious inverted index and save the index
+   #create an oblivious inverted index and save the oblivious index
    
  obi --load-inverted-index
  
@@ -62,7 +62,7 @@ Run "search.bat" to enter an OBI console.
    
  obi -load 
  
-   #load the full index
+   #load the full oblivious index
    
 # Usage:
 Run OBI.exe to enter a console.
