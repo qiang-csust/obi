@@ -58,13 +58,12 @@ Console Commands:
   -testsearch 1000 keyword1 keyword2 keyword3  
   
   #repeat the search 1000 times
- 
-  
+   
   -testsearch 1000 keyword1 keyword2 keyword3  
   
   #search each keyword 1000 times
   
-  -del w 100  
+  -del w 100
   
   #delete (w, 100)
   
@@ -82,7 +81,7 @@ Console Commands:
   
  -add w 100  
  
-  #add a (w,100) pair
+  #add a pair (w,100)
   
   -L 10 
   
