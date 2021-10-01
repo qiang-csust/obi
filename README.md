@@ -1,3 +1,4 @@
+# OBI
 Thank you for deploying the OBI project!
 
 Platform:
@@ -55,7 +56,8 @@ Console Commands:
 
   -testsearch 1000 keyword1 keyword2 keyword3  
   
-  # search each keyword 1000 times.
+  #repeat the search 1000 times
+ 
   
   -testsearch 1000 keyword1 keyword2 keyword3  
   
