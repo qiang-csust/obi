@@ -29,7 +29,7 @@ Thank you for deploying the OBI project!
 > 
 >   \>40GB for the whole Enron dataset
  
-# Compile the project
+# Compiling the project
 
 Install "Visual Studio 2019", and "Windows SDK 10.0". Set the compiler to C++ 20 Standard.
 
