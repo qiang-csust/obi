@@ -59,10 +59,6 @@ Console Commands:
   
   #repeat the search 1000 times
    
-  -testsearch 1000 keyword1 keyword2 keyword3  
-  
-  #search each keyword 1000 times
-  
   -del w 100
   
   #delete (w, 100)
