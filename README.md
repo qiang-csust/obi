@@ -145,9 +145,9 @@ Console Commands:
 
 		void testPerformance()
 		{
-			int L = 15; # The height of the tree
-			int S = 4;  # The root-node size (here, S=Z)
-			int Z = 4;  # The node size (i.e., the bucket size)
+			int L = 15; // The height of the tree
+			int S = 4;  // The root-node size (here, S=Z)
+			int Z = 4;  // The node size (i.e., the bucket size)
 			vector<unsigned long long> ids;
 			for (int i = 15; i < 23; i++)
 			{
