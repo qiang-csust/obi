@@ -927,7 +927,7 @@ int main(int c,char* argv[])
 {
 	//testLocalSetup(); getchar();
 	//testPerformance(); getchar(); 
-	printf("OBI v1.0, programmed by zhiqiang wu, wzq@csust.edu.cn\r\n\r\n");
+	printf("OBI v1.0, programmed by Dr. Zhiqiang Wu, wzq@csust.edu.cn\r\n\r\n");
 	printf("Eg:\r\n");
 	printf("obi --create-inverted-index d:\\myDirectory\r\n");
 	printf("obi --load-inverted-index \r\n");
