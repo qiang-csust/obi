@@ -84,6 +84,10 @@ Console Commands:
   
   #load the oblivious index
   
+ -add w 100  
+ 
+  #add a keyword-identifier pair (w,100)
+    
   -info  
   
   #show the index information
@@ -106,11 +110,7 @@ Console Commands:
   
   -dump 
   
-  #dump the tree
-  
- -add w 100  
- 
-  #add a pair (w,100)
+  #dump the tree 
   
   -L 10 
   
