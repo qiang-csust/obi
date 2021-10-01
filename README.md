@@ -68,6 +68,14 @@ Run OBI.exe to enter a console.
 
 Console Commands:
 
+  -load  
+  
+  #load the oblivious index
+  
+  -info  
+  
+  #show the index information
+  
   -testsearch 1000 keyword1 keyword2 keyword3  
   
   #repeat the search 1000 times
@@ -119,14 +127,6 @@ Console Commands:
   -save  
   
   #save the oblivious index
-  
-  -load  
-  
-  #load the oblivious index
-  
-  -info  
-  
-  #show the information
   
   # Demo
 //--------------------------------------------
