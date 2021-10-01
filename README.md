@@ -102,15 +102,15 @@ Console Commands:
   
   -path  
   
-  #set to the PATH-ORAM eviction algorithm\r\n");
+  #set to the PATH-ORAM eviction algorithm;
   
   -b  
   
-  #set to the KNNEA eviction algorithm \r\n");
+  #set to the KNNEA eviction algorithm;
   
   -p  
   
-  #set to the PBEA eviction algorithm \r\n");
+  #set to the PBEA eviction algorithm;
   
   -loadstash 100000 1000 
   
