@@ -23,6 +23,10 @@ Data files：
 
    Enron Dataset：enron_mail_20150507.tgz. Thanks: https://www.cs.cmu.edu/~./enron/
 
+Memory required
+
+  > 40GB for the whole Enron dataset
+  
 # Compile the project
 
 Install "Visual Studio 2019", and "Windows SDK 10.0". Set the compiler to C++ 20 Standard.
