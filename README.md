@@ -148,7 +148,7 @@ Console Commands:
 			int L = 15; # The height of the tree
 			int S = 4;  # The root-node size (here, S=Z)
 			int Z = 4;  # The node size (i.e., the bucket size)
-			vector<ull> ids;
+			vector<unsigned long long> ids;
 			for (int i = 15; i < 23; i++)
 			{
 				ORAMtree tree(i, S, Z);
