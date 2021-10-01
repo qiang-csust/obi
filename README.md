@@ -48,6 +48,7 @@ Command-Line Commands:
  obi --set-height 10 --max-size 10000 --max-m 1000
  
    #load a part of the existing plain-text inverted index into memory with L=10, N=1000, and m=1000.
+   
  obi -load 
  
    #load the full index
