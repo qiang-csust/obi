@@ -23,7 +23,6 @@ Data files：
 
    Enron Dataset：enron_mail_20150507.tgz. Thanks: https://www.cs.cmu.edu/~./enron/
    
-   Full plain-text inverted index: the "enron" directory
 
 # Indexing the Enron dataset
 
