@@ -22,11 +22,14 @@ Crypto++. Thanks: https://www.cryptopp.com/
 Data files：
 
    Enron Dataset：enron_mail_20150507.tgz. Thanks: https://www.cs.cmu.edu/~./enron/
-   
+
+# Compile the project
+
+Install "Visual Studio 2019", and "Windows SDK 10.0". Set the compiler to C++ 20 Standard.
+
+Unzip "obi-visual studio2019.zip", open the solution file "obi.sln", and compile the project.
 
 # Indexing the Enron dataset
-
-Unzip "obi-visual studio2019.zip", and compile the project.
 
 Unzip "obi-enron.zip"
 
