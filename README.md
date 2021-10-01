@@ -27,7 +27,7 @@ Thank you for deploying the OBI project!
 >   
 > Memory required
 > 
->   >40GB for the whole Enron dataset
+>   \>40GB for the whole Enron dataset
  
 # Compile the project
 
