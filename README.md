@@ -119,9 +119,13 @@ Console Commands:
   
 //--------------------------------------------
 		A C++ Demo using OBI:
+		
 		#include "common.h"
+		
 		#include "ORAMtree.h"
+		
 		#include <vector>
+		
 		#include <string>
 
 
@@ -152,8 +156,11 @@ Console Commands:
 
 //--------------------------------------------
 		A C++ Demo using OMMAP:
+		
 		#include <vector>
+		
 		using namespace std;
+		
 		import qiang.csust.obi;
 
 		void testOMMAP()
