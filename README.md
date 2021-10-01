@@ -26,9 +26,11 @@ Data files：
 
 # Indexing the Enron dataset
 
+Unzip "obi-visual studio2019.zip", and compile the project.
+
 Unzip "obi-enron.zip"
 
-Copy OBI.exe to the current directory.
+Copy "OBI.exe" to the current directory.
 
 Download "enron_mail_20150507.tgz" from "https://www.cs.cmu.edu/~./enron/"
 
