@@ -38,10 +38,7 @@ Run "createindex_enron.bat" to create a full plain-text inverted index.
 
 Run "search.bat" to enter an OBI console.
 
-# Usage:
-Run OBI.exe to enter a console.
-
-Command-Line Commands:
+# Command-Line Commands:
 
  obi --create-inverted-index d:\\myDirectory
  
@@ -65,6 +62,9 @@ Command-Line Commands:
  obi -load 
  
    #load the full index
+   
+# Usage:
+Run OBI.exe to enter a console.
 
 Console Commands:
 
