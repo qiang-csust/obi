@@ -145,24 +145,18 @@ Console Commands:
 
 		// A C++ Demo using OBI:
 		
-		#include "common.h"
-		
-		#include "ORAMtree.h"
-		
+		#include "common.h"		
+		#include "ORAMtree.h"		
 		#include <vector>
 		
-		#include <string>
-
-
 		void testPerformance()
 		{
-			int L = 15; // The height of the tree
 			int S = 4;  // The root-node size (here, S=Z)
 			int Z = 4;  // The node size (i.e., the bucket size)
 			vector<unsigned long long> ids;
 			for (int i = 15; i < 23; i++)
 			{
-				ORAMtree tree(i, S, Z);
+				ORAMtree tree(i, S, Z);	// i: The height of the ORAM tree
 				for (int j = 0; j < 1024; j++)
 				{
 					ids.push_back(j);
@@ -176,19 +170,16 @@ Console Commands:
 		int main(int c,char* argv[])
 		{
 			testPerformance(); 
-			getchar();
 		}
 
 --------------------------------------------
 
 		// A C++ Demo using OMMAP:
 		
-		#include <vector>
-		
-		using namespace std;
-		
+		#include <vector>	
+		using namespace std;		
 		import qiang.csust.obi;
-
+		
 		void testOMMAP()
 		{
 			OMMAP tree(10, 4, 4);
@@ -201,8 +192,7 @@ Console Commands:
 
 		int main(int c,char* argv[])
 		{
-			testOMMAP();
-			getchar();
+			testOMMAP();						
 		}
 
 
