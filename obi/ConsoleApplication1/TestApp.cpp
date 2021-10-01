@@ -916,21 +916,17 @@ void testPerformance()
 
 		for (int j = 0; j < 1024; j++)
 		{
-		//	tree.add("w", j);
 			ids.push_back(j);
 		}
 		tree.add("w", ids);
 		tree.search("w", ids,true);
 	}
-
-	//tree.search("abc",)
 }
 
 int main(int c,char* argv[])
 {
 	//testLocalSetup(); getchar();
 	//testPerformance(); getchar(); 
-
 	printf("OBI v1.0, programmed by zhiqiang wu, wzq@csust.edu.cn\r\n\r\n");
 	printf("Eg:\r\n");
 	printf("obi --create-inverted-index d:\\myDirectory\r\n");
@@ -940,9 +936,7 @@ int main(int c,char* argv[])
 	printf("obi --set-height 10 --max-size 10000 --max-m 1000\r\n");
 	printf("obi -load #load the index\r\n");
 	printf("\r\n\r\n");
-
 	ProgramStart(c, argv);
-
 	getchar();
 }
 
