@@ -33,7 +33,7 @@ Thank you for deploying the OBI project!
 
 Install "Visual Studio 2019", and "Windows SDK 10.0". Set the compiler to C++ 20 Standard.
 
-Unzip "obi-visual studio2019.zip", open the solution file "obi.sln", and compile the project.
+Unzip "obi-visual studio2019.zip" or clone https://github.com/qiang-csust/obi.git, open the solution file "obi.sln", and compile the project.
 
 # Indexing the Enron dataset
 
