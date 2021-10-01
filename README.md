@@ -37,7 +37,7 @@ Copy the unzipped Enron dataset to "E:\OBindex\maildir"
 
 Run "createindex_enron.bat" to create a full plain-text inverted index.
 
-Run "search.bat" to enter the OBI console.
+Run "search.bat" to enter an OBI console.
 
 # Usage:
 Run OBI.exe to enter a console.
