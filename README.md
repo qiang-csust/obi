@@ -25,7 +25,7 @@ Data files：
    
    Full plain-text inverted index: the "enron" directory
 
-Usage:
+# Usage:
 Run OBI.exe to enter a console.
 
 Command-Line Commands:
@@ -119,6 +119,7 @@ Console Commands:
   
   #show the information
   
+  # Demo
 //--------------------------------------------
 		A C++ Demo using OBI:
 		
