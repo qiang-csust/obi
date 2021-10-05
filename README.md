@@ -141,10 +141,10 @@ Console Commands:
 		{
 			int S = 4;  // The root-node size (here, S=Z)
 			int Z = 4;  // The node size (i.e., the bucket size)
-			vector<unsigned long long> ids;
 			for (int i = 15; i < 23; i++)
 			{
 				ORAMtree tree(i, S, Z);	// i: The height of the ORAM tree
+				vector<unsigned long long> ids;				
 				for (int j = 0; j < 1024; j++)
 				{
 					ids.push_back(j);
