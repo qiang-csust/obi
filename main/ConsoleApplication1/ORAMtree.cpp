@@ -20,10 +20,10 @@ void ORAMtree::init()
 	P.capacity = pow(2, P.L);// +1;
 	P.firstLeafID = pow(2, P.L - 1) -1;
 	P.leafCount = pow(2, P.L - 1);
-	ull mem = P.capacity * P.Z * 5;//×Ü¹²µÄÔªËØ¸öÊı³ËÒÔ5 ±£Ö¤¶ÁÈ¡ËÙ¶È
+	ull mem = P.capacity * P.Z * 5;//æ€»å…±çš„å…ƒç´ ä¸ªæ•°ä¹˜ä»¥5 ä¿è¯è¯»å–é€Ÿåº¦
 	ull maxMem = pow(2, 26);
-	if (mem > oram.max_bucket_count()) mem = oram.max_bucket_count();//±£ÁôÒ»²¿·Ö¿Õ¼ä
-	if (mem > maxMem) mem = maxMem;//³¬¹ıÁË»á·ÖÅäÄÚ´æ´íÎó
+	if (mem > oram.max_bucket_count()) mem = oram.max_bucket_count();//ä¿ç•™ä¸€éƒ¨åˆ†ç©ºé—´
+	if (mem > maxMem) mem = maxMem;//è¶…è¿‡äº†ä¼šåˆ†é…å†…å­˜é”™è¯¯
 	oram.reserve(mem);
 	initAES();
 }
@@ -33,7 +33,7 @@ void ORAMtree::initAES()
 	myAES::SetPrivateKey((char*)"12345678");
 }
 
-//del Ò²ÊÇ add £¬Ôö¼ÓÒ»¸ö±êÖ¾¼´¿É
+//del ä¹Ÿæ˜¯ add ï¼Œå¢åŠ ä¸€ä¸ªæ ‡å¿—å³å¯
 void ORAMtree::addBlock(string w, DataBlock block,  bool bForceAdd,bool bUseEvict )
 {
 	KeywordInfo info = { 0 };
@@ -59,7 +59,7 @@ void ORAMtree::addBlock(string w, DataBlock block,  bool bForceAdd,bool bUseEvic
 		localMap[w] = info;
 	}
 	vector<ull> leafs;
-	ull tk = CPath64(0).RandomLeaf(P.L);//Éú³ÉÒ»¸öËæ»úµÄÊ÷Ò¶½Úµã
+	ull tk = CPath64(0).RandomLeaf(P.L);//ç”Ÿæˆä¸€ä¸ªéšæœºçš„æ ‘å¶èŠ‚ç‚¹
 	leafs.push_back(tk);
 	ENodes enodes1 = ReadPath(tk);
 	WriteIntoStash(enodes1);
@@ -70,12 +70,12 @@ void ORAMtree::addBlock(string w, DataBlock block,  bool bForceAdd,bool bUseEvic
 //	data.data[0] = id;
 //	for (int i = 1; i < BLOCK_SIZE_B; i++)
 //	{
-//		data.data[i] = EMPTY_BLOCK_VALUE;//ÇåÁã
+//		data.data[i] = EMPTY_BLOCK_VALUE;//æ¸…é›¶
 //	}
 	DataBlock empty;
 	ReadWriteFromStash("write", futuretk, key, data, empty);
 	
-	if (bUseEvict) //ÇıÖğ²¢Ğ´Èëµ½ÔÆ·şÎñÆ÷
+	if (bUseEvict) //é©±é€å¹¶å†™å…¥åˆ°äº‘æœåŠ¡å™¨
 	{
 		ENodes enodes = RebuildPaths(leafs, 0);
 		writePath(enodes);
@@ -85,11 +85,11 @@ void ORAMtree::Evict0(int times)
 {
 	int stashSize = stash.size();
 	if (stashSize == 0) return;
-	int v = stashSize * times;//¶ÁÈ¡µÄÂ·¾¶µÄ¸öÊı
+	int v = stashSize * times;//è¯»å–çš„è·¯å¾„çš„ä¸ªæ•°
 	vector<ull> leafs;
 	for (int i = 0; i < v; i++)//
 	{
-		ull tk = CPath64(0).RandomLeaf(P.L);//Éú³ÉÒ»¸öËæ»úµÄÊ÷Ò¶½Úµã
+		ull tk = CPath64(0).RandomLeaf(P.L);//ç”Ÿæˆä¸€ä¸ªéšæœºçš„æ ‘å¶èŠ‚ç‚¹
 		leafs.push_back(tk);
 	};
 	for (int i = 0; i < leafs.size(); i++)
@@ -98,7 +98,7 @@ void ORAMtree::Evict0(int times)
 		WriteIntoStash(enodes1);
 	};
 
-	ENodes enodes = RebuildPaths(leafs, 0); //Ëã·¨1 ËÆºõÓĞÎÊÌâ£¬Ä¿Ç°²ÉÓÃËã·¨0
+	ENodes enodes = RebuildPaths(leafs, 0); //ç®—æ³•1 ä¼¼ä¹æœ‰é—®é¢˜ï¼Œç›®å‰é‡‡ç”¨ç®—æ³•0
 	writePath(enodes);
 }
 
@@ -106,12 +106,12 @@ void ORAMtree::Evict(int times)
 {
 	int stashSize = stash.size();
 	if (stashSize == 0) return;
-	int v = stashSize * times+6;//¶ÁÈ¡µÄÂ·¾¶µÄ¸öÊı
+	int v = stashSize * times+6;//è¯»å–çš„è·¯å¾„çš„ä¸ªæ•°
 	vector<ull> leafs;
 	unordered_map<ull, int> old;
 	for (int i = 0; i < v; i++)//
 	{
-		ull tk = CPath64(0).RandomLeaf(P.L);//Éú³ÉÒ»¸öËæ»úµÄÊ÷Ò¶½Úµã
+		ull tk = CPath64(0).RandomLeaf(P.L);//ç”Ÿæˆä¸€ä¸ªéšæœºçš„æ ‘å¶èŠ‚ç‚¹
 		if (old[tk] == 1) continue;
 		leafs.push_back(tk);
 		old[tk] = 1;
@@ -122,11 +122,11 @@ void ORAMtree::Evict(int times)
 		WriteIntoStash(enodes1);
 	};
 
-	ENodes enodes = RebuildPaths(leafs,1); //Ëã·¨1 ËÆºõÓĞÎÊÌâ£¬Ä¿Ç°²ÉÓÃËã·¨0
+	ENodes enodes = RebuildPaths(leafs,1); //ç®—æ³•1 ä¼¼ä¹æœ‰é—®é¢˜ï¼Œç›®å‰é‡‡ç”¨ç®—æ³•0
 	writePath(enodes);
 }
 
-//±¾µØÔö¼ÓÒ»¸ö¿é£¬²»Ğ´Èëµ½ ÔÆ¶ËµÄ ORAMtreeÖ®ÖĞ
+//æœ¬åœ°å¢åŠ ä¸€ä¸ªå—ï¼Œä¸å†™å…¥åˆ° äº‘ç«¯çš„ ORAMtreeä¹‹ä¸­
 ull ORAMtree::addBlockLocal(string w, DataBlock block, bool bForceAdd)
 {
 	KeywordInfo info = { 0 };
@@ -152,7 +152,7 @@ ull ORAMtree::addBlockLocal(string w, DataBlock block, bool bForceAdd)
 		localMap[w] = info;
 	}
 	vector<ull> leafs;
-	ull tk = CPath64(0).RandomLeaf(P.L);//Éú³ÉÒ»¸öËæ»úµÄÊ÷Ò¶½Úµã
+	ull tk = CPath64(0).RandomLeaf(P.L);//ç”Ÿæˆä¸€ä¸ªéšæœºçš„æ ‘å¶èŠ‚ç‚¹
 	leafs.push_back(tk);
 	ENodes enodes1 = ReadPath(tk);
 	WriteIntoStash(enodes1);
@@ -163,15 +163,15 @@ ull ORAMtree::addBlockLocal(string w, DataBlock block, bool bForceAdd)
 	//	data.data[0] = id;
 	//	for (int i = 1; i < BLOCK_SIZE_B; i++)
 	//	{
-	//		data.data[i] = EMPTY_BLOCK_VALUE;//ÇåÁã
+	//		data.data[i] = EMPTY_BLOCK_VALUE;//æ¸…é›¶
 	//	}
 	DataBlock empty;
 	ReadWriteFromStash("write", futuretk, key, data, empty);
 
-//  ×¢Òâ£ºÕâÀï²»Ğ´Èëµ½ÔÆ¶ËµÄ·şÎñÆ÷Ö®ÖĞ¡£
+//  æ³¨æ„ï¼šè¿™é‡Œä¸å†™å…¥åˆ°äº‘ç«¯çš„æœåŠ¡å™¨ä¹‹ä¸­ã€‚
 //	ENodes enodes = RebuildPaths(leafs);
 //	writePath(enodes);
-	return tk;//·µ»ØÒ»¸öÒ¶×Ó
+	return tk;//è¿”å›ä¸€ä¸ªå¶å­
 }
 
 
@@ -182,11 +182,11 @@ void ORAMtree::add(string w, unsigned long long id,bool bForce)
 		data.data[0] = id;
 		for (int i = 1; i < BLOCK_SIZE_B; i++)
 		{
-			data.data[i] = DUMMY_VALUE;//ÇåÁã
+			data.data[i] = DUMMY_VALUE;//æ¸…é›¶
 		}
 		addBlock(w, data, bForce);
 }
-void ORAMtree::add(string w, vector<ull> ids,bool bForce,bool bUseEvict)//ÅúÁ¿Ôö¼Ó
+void ORAMtree::add(string w, vector<ull> ids,bool bForce,bool bUseEvict)//æ‰¹é‡å¢åŠ 
 {
 	DataBlock data= EmptyBlock();
 	int j = 0;
@@ -206,7 +206,7 @@ void ORAMtree::add(string w, vector<ull> ids,bool bForce,bool bUseEvict)//ÅúÁ¿Ôö
 		addBlock(w, data,false, bUseEvict);
 	}
 }
-void ORAMtree::insertBatch(string w, ull from, ull to)//ÅúÁ¿Ôö¼Ó
+void ORAMtree::insertBatch(string w, ull from, ull to)//æ‰¹é‡å¢åŠ 
 {
 	vector<ull> ids;
 	for (ull i = from; i <= to; i++)
@@ -224,7 +224,7 @@ void ORAMtree::insertBatch(string w, ull from, ull to)//ÅúÁ¿Ôö¼Ó
 		ids.clear();
 	}
 }
-void ORAMtree::insertBatchLocal(string w, ull from, ull to)//ÅúÁ¿Ôö¼Ó
+void ORAMtree::insertBatchLocal(string w, ull from, ull to)//æ‰¹é‡å¢åŠ 
 {
 	vector<ull> ids;
 	for (ull i = from; i <= to; i++)
@@ -232,21 +232,21 @@ void ORAMtree::insertBatchLocal(string w, ull from, ull to)//ÅúÁ¿Ôö¼Ó
 		ids.push_back(i);
 		if (ids.size() == BLOCK_SIZE_B)
 		{
-			add(w, ids, false,false);;//²»ÇıÖğ
+			add(w, ids, false,false);;//ä¸é©±é€
 			ids.clear();
 		}
 	}
 	if (ids.size() > 0)
 	{
-		add(w, ids, false,false);//²»ÇıÖğ
+		add(w, ids, false,false);//ä¸é©±é€
 		ids.clear();
 	}
 }
 
 
 
-//´Óµ¹ÅÅË÷Òı¹¹½¨
-void ORAMtree::SetupLocal(unordered_map<string,vector<ull>>& inverted_index)//ÅúÁ¿Ôö¼Ó
+//ä»å€’æ’ç´¢å¼•æ„å»º
+void ORAMtree::SetupLocal(unordered_map<string,vector<ull>>& inverted_index)//æ‰¹é‡å¢åŠ 
 {
 	ull tk = 0;
 	vector<ull> leafs;
@@ -278,7 +278,7 @@ void ORAMtree::SetupLocal(unordered_map<string,vector<ull>>& inverted_index)//Åú
 	ENodes enodes = RebuildPaths_initial();
 	writePath(enodes);
 }
-void ORAMtree::SetupOnline(unordered_map<string, vector<ull>>& inverted_index)//ÅúÁ¿Ôö¼Ó
+void ORAMtree::SetupOnline(unordered_map<string, vector<ull>>& inverted_index)//æ‰¹é‡å¢åŠ 
 {
 	ull tk = 0;
 	vector<ull> leafs;
@@ -314,7 +314,7 @@ ull ORAMtree::addLocal(string w, vector<ull> ids, bool bForce)
 	return tk;
 }
 
-//del Ò²ÊÇ add £¬Ôö¼ÓÒ»¸ö±êÖ¾¼´¿É
+//del ä¹Ÿæ˜¯ add ï¼Œå¢åŠ ä¸€ä¸ªæ ‡å¿—å³å¯
 void ORAMtree::del(string w, unsigned long long id)
 {
 	ull id1 = toDelIdentifer(id);
@@ -343,26 +343,26 @@ void ORAMtree::search(string w, vector<unsigned long long>& ids, bool bDebug)
 	if (info.wLength == 0)
 	{
 		printf("\r\n not found: %s \r\n", w.c_str());
-		return;//´Ë¹Ø¼ü´ÊÒÑ¾­±»É¾³ı
+		return;//æ­¤å…³é”®è¯å·²ç»è¢«åˆ é™¤
 	};
 	for (int i = 1; i <= info.wLength; i++)
 	{
 		unsigned long long tk = SearchToken(w, i, info.searchCounter);
 		if (filter[tk] == 1) continue;
-		filter[tk] = 1;//È¥³ıÖØ¸´
+		filter[tk] = 1;//å»é™¤é‡å¤
 		tokens.push_back(tk);
 		CPath64 debugPath;
 		debugPath.value = tk;
 		string path = debugPath.ToString();
 	}
 
-	//	static ulong g_seed = 0; //ÕâËã·¨ÓĞÎÊÌâ£¬Ã»Ê²Ã´ÓÃ
-	//	for (int i = 1; i <= stash.size() ; i++) //´Ë´¦ÊÇÓÃÓÚÉú³ÉËæ»ú·ÃÎÊÒ¶×Ó£¬ÓÃÓÚÇıÖğ
+	//	static ulong g_seed = 0; //è¿™ç®—æ³•æœ‰é—®é¢˜ï¼Œæ²¡ä»€ä¹ˆç”¨
+	//	for (int i = 1; i <= stash.size() ; i++) //æ­¤å¤„æ˜¯ç”¨äºç”Ÿæˆéšæœºè®¿é—®å¶å­ï¼Œç”¨äºé©±é€
 	//	{
-	//		ulong tk = SearchToken(string("seed:")+IntToStr(g_seed++)+string(":"), i, 0);//Éú³ÉËæ»úÊı
+	//		ulong tk = SearchToken(string("seed:")+IntToStr(g_seed++)+string(":"), i, 0);//ç”Ÿæˆéšæœºæ•°
 	//		if (filter[tk] == 1) continue;
-	//		filter[tk] = 1;//È¥³ıÖØ¸´
-	//		tokens.push_back(tk);//Ëæ»ú»ñÈ¡Ò»ÌõÂ·¾¶µÄÊı¾İ£¬Ô¤Áô²éÑ¯ÓÃ
+	//		filter[tk] = 1;//å»é™¤é‡å¤
+	//		tokens.push_back(tk);//éšæœºè·å–ä¸€æ¡è·¯å¾„çš„æ•°æ®ï¼Œé¢„ç•™æŸ¥è¯¢ç”¨
 	//	}
 	ENodes enodes1 = ReadPaths(tokens);
 	double time_transfer = time_ms();
@@ -376,11 +376,11 @@ void ORAMtree::search(string w, vector<unsigned long long>& ids, bool bDebug)
 	{
 		IndexKey key = toIndexKey(w, i);
 		w_i_keys.push_back(key);
-		ull futuretk = SearchToken(w, i, info.searchCounter + 1);//ÏÂÒ»´Î·ÃÎÊµÄÒ¶×ÓÎ»ÖÃ
+		ull futuretk = SearchToken(w, i, info.searchCounter + 1);//ä¸‹ä¸€æ¬¡è®¿é—®çš„å¶å­ä½ç½®
 		w_i_tokens.push_back(futuretk);
 		DataBlock input = { 0 };
 		DataBlock output = { 0 };
-		bool bExist = ReadWriteFromStash("read", futuretk, key, input, output);//¶ÁÈ¡ ¿éµÄÄÚÈİ
+		bool bExist = ReadWriteFromStash("read", futuretk, key, input, output);//è¯»å– å—çš„å†…å®¹
 		for (int j = 0; j < BLOCK_SIZE_B; j++)
 		{
 			ull id;
@@ -390,13 +390,13 @@ void ORAMtree::search(string w, vector<unsigned long long>& ids, bool bDebug)
 			{
 				deleteFromVector(results, id);
 				printf(" delete id=%ld \r\n", id);
-				resultKeywords[id] = 0;//±êÖ¾Îª´ËidÒÑ¾­É¾³ı
+				resultKeywords[id] = 0;//æ ‡å¿—ä¸ºæ­¤idå·²ç»åˆ é™¤
 			}
-			if (resultKeywords[id] != 1)//È¥³ıÖØ¸´µÄÔö¼ÓµÄidÊı¾İ
+			if (resultKeywords[id] != 1)//å»é™¤é‡å¤çš„å¢åŠ çš„idæ•°æ®
 			{
 				if (!b)
 				{
-					resultKeywords[id] = 1;//±êÖ¾Îª´ËidÒÑ¾­Ôö¼Ó
+					resultKeywords[id] = 1;//æ ‡å¿—ä¸ºæ­¤idå·²ç»å¢åŠ 
 					results.push_back(id);
 				}
 			}
@@ -404,7 +404,7 @@ void ORAMtree::search(string w, vector<unsigned long long>& ids, bool bDebug)
 		//results.push_back(output.data);
 	}
 	int w_blockcount = 0;
-	if (oldSize != results.size())//Èç¹ûÎÄ¼ş±êÊ¶½á¹û¼¯ ĞèÒªÖØ¹¹£¬±ÈÈçÖØ¸´µÄidentifer£¬±êÖ¾ÎªÒÑ¾­É¾³ıµÄidentifier
+	if (oldSize != results.size())//å¦‚æœæ–‡ä»¶æ ‡è¯†ç»“æœé›† éœ€è¦é‡æ„ï¼Œæ¯”å¦‚é‡å¤çš„identiferï¼Œæ ‡å¿—ä¸ºå·²ç»åˆ é™¤çš„identifier
 	{
 		int j = 0;
 		for (int i = 1; i <= info.wLength; i++)
@@ -419,12 +419,12 @@ void ORAMtree::search(string w, vector<unsigned long long>& ids, bool bDebug)
 			}
 			if (!isEmptyBlock(input))
 			{
-				ReadWriteFromStash("write", w_i_tokens[i - 1], w_i_keys[i - 1], input, output);//ÖØ¹¹¿éµÄ½á¹¹£¬É¾³ıÖØ¸´µÄidentifier£¬ÒÑÉ¾³ıµÄidentifier
+				ReadWriteFromStash("write", w_i_tokens[i - 1], w_i_keys[i - 1], input, output);//é‡æ„å—çš„ç»“æ„ï¼Œåˆ é™¤é‡å¤çš„identifierï¼Œå·²åˆ é™¤çš„identifier
 				w_blockcount++;
 			}
 			else
 			{
-				stash.erase(w_i_keys[i - 1]);//É¾³ı¶àÓàµÄ¿é
+				stash.erase(w_i_keys[i - 1]);//åˆ é™¤å¤šä½™çš„å—
 				break;
 			}
 		}
@@ -439,7 +439,7 @@ void ORAMtree::search(string w, vector<unsigned long long>& ids, bool bDebug)
 	double time_end = time_ms();
 
 	info.searchCounter++;
-	info.wLength = w_blockcount;//ĞŞÕı¿é³¤¶È
+	info.wLength = w_blockcount;//ä¿®æ­£å—é•¿åº¦
 	localMap[w] = info;
 	ids = results;
 	if(bDebug)
@@ -493,17 +493,17 @@ bool ORAMtree::ReadWriteFromStash(string op, ull newLeaf, IndexKey key, DataBloc
 		s.leaf = newLeaf;
 		stash[key] = s;
 		bExist = true;
-		//w_block_count++;//²åÈëÁËÒ»¿é ¼ÆÊı
+		//w_block_count++;//æ’å…¥äº†ä¸€å— è®¡æ•°
 	}
 	else
 	{
-		if (stash.find(key) == stash.end()) //Èç¹û¶Áµ½Ò»¸ö¿ÕµÄkey-value£¬Òª²»Òª²åÈë£¿
+		if (stash.find(key) == stash.end()) //å¦‚æœè¯»åˆ°ä¸€ä¸ªç©ºçš„key-valueï¼Œè¦ä¸è¦æ’å…¥ï¼Ÿ
 		{
 		//	Slot s;
 		//	s.key = key;
 		//	s.value = input_data;
 		//	s.leaf = newLeaf;
-		//	stash[key] = s;   //Ã»±ØÒª²åÈëÁË°É
+		//	stash[key] = s;   //æ²¡å¿…è¦æ’å…¥äº†å§
 			bExist = false;
 		}
 		else
@@ -511,7 +511,7 @@ bool ORAMtree::ReadWriteFromStash(string op, ull newLeaf, IndexKey key, DataBloc
 			Slot s = stash[key];
 			output_data = s.value;
 			s.leaf = newLeaf;
-			stash[key] = s;//¸ü»»ĞÂµÄÒ¶×Ó½Úµã
+			stash[key] = s;//æ›´æ¢æ–°çš„å¶å­èŠ‚ç‚¹
 			bExist = true;
 		}
 	}
@@ -520,7 +520,7 @@ bool ORAMtree::ReadWriteFromStash(string op, ull newLeaf, IndexKey key, DataBloc
 
 bool LessSortByLeaf(Slot a, Slot b) { return (a.leaf < b.leaf); };
 
-//¶ş·Ö²éÕÒ Èç¹û²éÕÒÊ§°Ü£¬ÔòÕÒÒ»¸ö×î½üµÄ
+//äºŒåˆ†æŸ¥æ‰¾ å¦‚æœæŸ¥æ‰¾å¤±è´¥ï¼Œåˆ™æ‰¾ä¸€ä¸ªæœ€è¿‘çš„
 int ORAMtree::FindOneSlotFromSortedVector(vector<Slot>& slots, Slot tobeSearch)
 {
 	int i =0;
@@ -535,7 +535,7 @@ int ORAMtree::FindOneSlotFromSortedVector(vector<Slot>& slots, Slot tobeSearch)
 		i = (max + min) / 2;
 		if (max < min)
 		{
-			return i;//²éÕÒÊ§°Ü Ñ¡ÔñÒ»¸ö×î½üµÄÎïÌå
+			return i;//æŸ¥æ‰¾å¤±è´¥ é€‰æ‹©ä¸€ä¸ªæœ€è¿‘çš„ç‰©ä½“
 		};
 		if (slots[i].leaf == tobeSearch.leaf)
 		{
@@ -556,7 +556,7 @@ int ORAMtree::FindOneSlotFromSortedVector(vector<Slot>& slots, Slot tobeSearch)
 
 
 
-//¶ş·Ö²éÕÒ Èç¹û²éÕÒÊ§°Ü£¬ÔòÕÒÒ»¸ö×î½üµÄ
+//äºŒåˆ†æŸ¥æ‰¾ å¦‚æœæŸ¥æ‰¾å¤±è´¥ï¼Œåˆ™æ‰¾ä¸€ä¸ªæœ€è¿‘çš„
 /*
 int ORAMtree::FindOneSlotFromSortedMap(orderedMap& stashMap, Slot tobeSearch)
 {
@@ -573,7 +573,7 @@ int ORAMtree::FindOneSlotFromSortedMap(orderedMap& stashMap, Slot tobeSearch)
 		i = (max + min) / 2;
 		if (max < min)
 		{
-			return i;//²éÕÒÊ§°Ü Ñ¡ÔñÒ»¸ö×î½üµÄÎïÌå
+			return i;//æŸ¥æ‰¾å¤±è´¥ é€‰æ‹©ä¸€ä¸ªæœ€è¿‘çš„ç‰©ä½“
 		};
 		if (slots[i].leaf == tobeSearch.leaf)
 		{
@@ -685,7 +685,7 @@ void ORAMtree::DeleteOneSlotFromVector(vector<Slot>& slots, Slot tobeDelete)
 	//slots.erase(slots.begin() + r);
 }
 
-//Ñ°ÕÒºÍ leaf ×î½üµÄ Z ¸öslot£¬Èç¹ûÃ»ÓĞZ¸ö£¬Ôò·µ»ØÈ«²¿µÄ
+//å¯»æ‰¾å’Œ leaf æœ€è¿‘çš„ Z ä¸ªslotï¼Œå¦‚æœæ²¡æœ‰Zä¸ªï¼Œåˆ™è¿”å›å…¨éƒ¨çš„
 void ORAMtree::FindZNearbySlotFromVector(vector<Slot>& slots, ull leaf, vector<Slot>& Z_results,int size)
 {
 	Slot s;
@@ -695,7 +695,7 @@ void ORAMtree::FindZNearbySlotFromVector(vector<Slot>& slots, ull leaf, vector<S
 	int j = 1;
 	if (slots.size() <= size)
 	{
-		Z_results = slots;//·µ»ØÈ«²¿µÄ
+		Z_results = slots;//è¿”å›å…¨éƒ¨çš„
 		return;
 	}
 	Z_results.push_back(slots[i]);
@@ -719,7 +719,7 @@ void ORAMtree::FindZNearbySlotFromVector(vector<Slot>& slots, ull leaf, vector<S
 	}
 }
 
-//Ñ°ÕÒºÍ leaf ×î½üµÄ Z ¸öslot£¬Èç¹ûÃ»ÓĞZ¸ö£¬Ôò·µ»ØÈ«²¿µÄ
+//å¯»æ‰¾å’Œ leaf æœ€è¿‘çš„ Z ä¸ªslotï¼Œå¦‚æœæ²¡æœ‰Zä¸ªï¼Œåˆ™è¿”å›å…¨éƒ¨çš„
 //void ORAMtree::FindZNearbySlotFromMap(orderedMap& stashMap, ulong leaf, vector<Slot>& Z_results, int size)
 //{
 //	Slot s;
@@ -729,7 +729,7 @@ void ORAMtree::FindZNearbySlotFromVector(vector<Slot>& slots, ull leaf, vector<S
 //	int j = 1;
 //	if (slots.size() <= size)
 //	{
-//		Z_results = slots;//·µ»ØÈ«²¿µÄ
+//		Z_results = slots;//è¿”å›å…¨éƒ¨çš„
 //		return;
 //	}
 //	Z_results.push_back(slots[i]);
@@ -740,13 +740,13 @@ void ORAMtree::FindZNearbySlotFromVector(vector<Slot>& slots, ull leaf, vector<S
 //		for(int i=0;i<size/2;i++)
 //		{
 //			it++;
-//			if (it == stashMap.end()) break; //ºóÃæ¶ÁÈ¡size/2¸ö
+//			if (it == stashMap.end()) break; //åé¢è¯»å–size/2ä¸ª
 //			Z_results.push_back((*it).second);
 //		}
 //		for (int i = 0; i < size / 2; i++)
 //		{
 //			it1--;
-//			if (it1 == stashMap.end()) break;//Ç°Ãæ¶ÁÈ¡size/2¸ö
+//			if (it1 == stashMap.end()) break;//å‰é¢è¯»å–size/2ä¸ª
 //			Z_results.push_back((*it1).second);
 //		}
 //}
@@ -765,20 +765,20 @@ void ORAMtree::evictPathsPATHORAM(unordered_map<string, TreeNode>& pathNodes, ve
 			//string p1 = currentLeaf.AtLevelPath(i);
 			ull p1long = currentLeaf.AtLevelPathFast(i, P.L);
 			string p1 = NumberToPath(p1long);
-			node = pathNodes[p1];//Èç¹ûpathNodesÖĞ²»°üº¬ p1£¬Ôò»á²åÈëÒ»¸ö¿ÕµÄ½Úµã Õ¼Î»
+			node = pathNodes[p1];//å¦‚æœpathNodesä¸­ä¸åŒ…å« p1ï¼Œåˆ™ä¼šæ’å…¥ä¸€ä¸ªç©ºçš„èŠ‚ç‚¹ å ä½
 			for (auto v=stash.begin();v!=stash.end();)
 			{
 				//int level = path64.Cross(leaf, v.second.leaf).GetLevel();	
 				double t1 = time_ms();
-				ull p2long = CPath64((*v).second.leaf).AtLevelPathFast(i,P.L); //´ËËã·¨Ğ§ÂÊ²»¸ß£¬
+				ull p2long = CPath64((*v).second.leaf).AtLevelPathFast(i,P.L); //æ­¤ç®—æ³•æ•ˆç‡ä¸é«˜ï¼Œ
 				double t2 = time_ms();
 				debug.PATH_ORAM_chooseTime += t2 - t1;
 				debug.PATH_pathObjInit++;
-				if (p1long == p2long) //ÒòÎª±»ÇıÖğµÄ½Úµã¿ÉÄÜ²»ÊÇ×î½üµÄ½Úµã£¬
+				if (p1long == p2long) //å› ä¸ºè¢«é©±é€çš„èŠ‚ç‚¹å¯èƒ½ä¸æ˜¯æœ€è¿‘çš„èŠ‚ç‚¹ï¼Œ
 				{
 					Slot s;
 					s = (*v).second;
-					if (node.slots.size() < P.Z) //root ×î¶à S¸ö
+					if (node.slots.size() < P.Z) //root æœ€å¤š Sä¸ª
 					{
 						node.slots.push_back(s);
 						v++;
@@ -788,7 +788,7 @@ void ORAMtree::evictPathsPATHORAM(unordered_map<string, TreeNode>& pathNodes, ve
 					else
 					{
 						v++;
-						break;//½ÚµãÂú
+						break;//èŠ‚ç‚¹æ»¡
 					}
 					pathNodes[p1] = node;
 				}
@@ -813,30 +813,30 @@ void ORAMtree::evictPath(unordered_map<string, TreeNode>& pathNodes, vector<Slot
 	{
 		TreeNode node;
 		string p1 = currentLeaf.AtLevelPath(i);
-		node = pathNodes[p1];//Èç¹ûpathNodesÖĞ²»°üº¬ p1£¬Ôò»á²åÈëÒ»¸ö¿ÕµÄ½Úµã Õ¼Î»
+		node = pathNodes[p1];//å¦‚æœpathNodesä¸­ä¸åŒ…å« p1ï¼Œåˆ™ä¼šæ’å…¥ä¸€ä¸ªç©ºçš„èŠ‚ç‚¹ å ä½
 		for (auto v : temp)
 		{
 			//	int level = path64.Cross(leaf, v.second.leaf).GetLevel();	
-			string p2 = CPath64(v.second.leaf).AtLevelPath(i); //´ËËã·¨Ğ§ÂÊ²»¸ß£¬
+			string p2 = CPath64(v.second.leaf).AtLevelPath(i); //æ­¤ç®—æ³•æ•ˆç‡ä¸é«˜ï¼Œ
 
-			if (p1 == p2) //ÒòÎª±»ÇıÖğµÄ½Úµã¿ÉÄÜ²»ÊÇ×î½üµÄ½Úµã£¬
+			if (p1 == p2) //å› ä¸ºè¢«é©±é€çš„èŠ‚ç‚¹å¯èƒ½ä¸æ˜¯æœ€è¿‘çš„èŠ‚ç‚¹ï¼Œ
 			{
 				Slot s;
 				s = v.second;			
 				if (i == 1)
 				{
-				//	node.slots.push_back(s);//È«²¿¼ÓÈë ²»×öÅĞ¶ÏÁË ¸ú½Úµã
+				//	node.slots.push_back(s);//å…¨éƒ¨åŠ å…¥ ä¸åšåˆ¤æ–­äº† è·ŸèŠ‚ç‚¹
 				//	if (node.slots.size() >= P.max_S)
 				//	{
 				//		P.max_S = node.slots.size();
 				//	}
-					if (node.slots.size() < P.S) //root ×î¶à S¸ö
+					if (node.slots.size() < P.S) //root æœ€å¤š Sä¸ª
 					{
 						node.slots.push_back(s);
 					}
 					else
 					{
-						break;//½ÚµãÂú
+						break;//èŠ‚ç‚¹æ»¡
 					}
 				}
 				else
@@ -847,7 +847,7 @@ void ORAMtree::evictPath(unordered_map<string, TreeNode>& pathNodes, vector<Slot
 					}
 					else
 					{
-						break;//½ÚµãÂú
+						break;//èŠ‚ç‚¹æ»¡
 					}
 				}
 				pathNodes[p1] = node;
@@ -856,12 +856,12 @@ void ORAMtree::evictPath(unordered_map<string, TreeNode>& pathNodes, vector<Slot
 		for (Slot &v : node.slots)
 		{
 			temp.erase(v.key);
-			stash.erase(v.key);//½«ÒÑ¾­±»ÇıÖğµÄÔªËØ´ÓstashÉ¾³ı
+			stash.erase(v.key);//å°†å·²ç»è¢«é©±é€çš„å…ƒç´ ä»stashåˆ é™¤
 		}
 	}
 }
 
-//»ñÈ¡½»²æ½Úµã ±àºÅ
+//è·å–äº¤å‰èŠ‚ç‚¹ ç¼–å·
 unsigned long long cross(unsigned long long leaf1, unsigned long long leaf2)
 {
 	unsigned long long f1 = leaf1;
@@ -882,9 +882,9 @@ unsigned long long cross(unsigned long long leaf1, unsigned long long leaf2)
 ull g_leaf = 0;
 bool LessSortByLeaf2(Slot& a, Slot& b) 
 { 
-	return cross(a.leaf, g_leaf) >= cross(b.leaf, g_leaf); //ÅĞ¶Ï×ÓÊ÷×î¶à
-	//return fabs(a.leaf- g_leaf) < fabs(b.leaf- g_leaf); //ÕâÑù¼õ²»ÊÇ×îºÃ°ì·¨ ÒòÎª×î½ü
-};//Ñ¡Ôñ×î¿¿½üÒ¶×ÓµÄ
+	return cross(a.leaf, g_leaf) >= cross(b.leaf, g_leaf); //åˆ¤æ–­å­æ ‘æœ€å¤š
+	//return fabs(a.leaf- g_leaf) < fabs(b.leaf- g_leaf); //è¿™æ ·å‡ä¸æ˜¯æœ€å¥½åŠæ³• å› ä¸ºæœ€è¿‘
+};//é€‰æ‹©æœ€é è¿‘å¶å­çš„
 
 void ORAMtree::sortByLeafDistance(vector<Slot>& slots,ull leaf)
 {
@@ -898,30 +898,30 @@ void ORAMtree::evictPath1(unordered_map<string, TreeNode>& pathNodes, vector<Slo
 
 	//unordered_map<ulong, int> removed;
 	//KeyValues removed;
-	sortByLeafDistance(slots, leaf);//°´ÕÕ¿¿½üÒ¶×ÓµÄË³ĞòÅÅĞò£¬ÇıÖğËã·¨
-	//´Ó×îµ×²ã¿ªÊ¼É¨Ãè
+	sortByLeafDistance(slots, leaf);//æŒ‰ç…§é è¿‘å¶å­çš„é¡ºåºæ’åºï¼Œé©±é€ç®—æ³•
+	//ä»æœ€åº•å±‚å¼€å§‹æ‰«æ
 	int j = 0;
-	for (int i = P.L; i >= 1; i--)//´Ó×îµ×²ã¿ªÊ¼ µ½×îÉÏ²ã
+	for (int i = P.L; i >= 1; i--)//ä»æœ€åº•å±‚å¼€å§‹ åˆ°æœ€ä¸Šå±‚
 	{
 		TreeNode node;
 		string p1 = currentLeaf.AtLevelPath(i);
-		node = pathNodes[p1];//Èç¹ûpathNodesÖĞ²»°üº¬ p1£¬Ôò»á²åÈëÒ»¸ö¿ÕµÄ½Úµã Õ¼Î»
+		node = pathNodes[p1];//å¦‚æœpathNodesä¸­ä¸åŒ…å« p1ï¼Œåˆ™ä¼šæ’å…¥ä¸€ä¸ªç©ºçš„èŠ‚ç‚¹ å ä½
 		node.path = p1;
 		node.level = p1.length();
-		for(int k=0;k<P.Z;k++) //Ã¿Ò»²ã³¢ÊÔZ´ÎÇıÖğ
-		if(j < slots.size())//½«ËùÓĞµÄslotÇıÖğµ½ Ê÷ÀïÃæ
+		for(int k=0;k<P.Z;k++) //æ¯ä¸€å±‚å°è¯•Zæ¬¡é©±é€
+		if(j < slots.size())//å°†æ‰€æœ‰çš„sloté©±é€åˆ° æ ‘é‡Œé¢
 		{
 			//	int level = path64.Cross(leaf, v.second.leaf).GetLevel();
 			Slot v = slots[j];
-			string p2 = CPath64(v.leaf).AtLevelPath(i); //´ËËã·¨Ğ§ÂÊ²»¸ß£¬
-		//	if (removed[v.key].leaf > 0) continue;//±íÊ¾ÒÑ¾­É¾³ıÁË//²»ĞèÒªÅĞ¶ÏÁË£¬´Ë´¦ÒÑ¾­±êÊ¶
-			if (p1 == p2) //ÒòÎª±»ÇıÖğµÄ½Úµã¿ÉÄÜ²»ÊÇ×î½üµÄ½Úµã£¬
+			string p2 = CPath64(v.leaf).AtLevelPath(i); //æ­¤ç®—æ³•æ•ˆç‡ä¸é«˜ï¼Œ
+		//	if (removed[v.key].leaf > 0) continue;//è¡¨ç¤ºå·²ç»åˆ é™¤äº†//ä¸éœ€è¦åˆ¤æ–­äº†ï¼Œæ­¤å¤„å·²ç»æ ‡è¯†
+			if (p1 == p2) //å› ä¸ºè¢«é©±é€çš„èŠ‚ç‚¹å¯èƒ½ä¸æ˜¯æœ€è¿‘çš„èŠ‚ç‚¹ï¼Œ
 			{
 				Slot s;
 				s = v;
 			//	if (i == 1)
 			//	{
-			//		node.slots.push_back(s);//È«²¿¼ÓÈë ²»×öÅĞ¶ÏÁË ¸ú½Úµã
+			//		node.slots.push_back(s);//å…¨éƒ¨åŠ å…¥ ä¸åšåˆ¤æ–­äº† è·ŸèŠ‚ç‚¹
 			//		if (node.slots.size() >= P.max_S)
 			//		{
 			//			P.max_S = node.slots.size();
@@ -930,11 +930,11 @@ void ORAMtree::evictPath1(unordered_map<string, TreeNode>& pathNodes, vector<Slo
 			//		{
 			//			node.slots.push_back(s);
 			//			//removed[s.key] = s;
-			//			j++;//ÒÑ¾­Ê¹ÓÃÁË´Ë½Úµã
+			//			j++;//å·²ç»ä½¿ç”¨äº†æ­¤èŠ‚ç‚¹
 			//		}
 			//		else
 			//		{
-			//			break;//½ÚµãÂú
+			//			break;//èŠ‚ç‚¹æ»¡
 			//		}
 			//	}
 			//	else
@@ -942,12 +942,12 @@ void ORAMtree::evictPath1(unordered_map<string, TreeNode>& pathNodes, vector<Slo
 					if (node.slots.size() < P.Z)
 					{
 						node.slots.push_back(s);
-						j++;//ÒÑ¾­Ê¹ÓÃÁË
+						j++;//å·²ç»ä½¿ç”¨äº†
 						//removed[s.key] = s;
 					}
 					else
 					{
-						break;//½ÚµãÂú
+						break;//èŠ‚ç‚¹æ»¡
 					}
 				//}
 			}
@@ -957,50 +957,50 @@ void ORAMtree::evictPath1(unordered_map<string, TreeNode>& pathNodes, vector<Slo
 		//for (auto & v : removed)
 		{
 			//slots.erase(&v);
-			//removed[v.key] = v;//±ê¼ÇÎªÉ¾³ı
-			stash.erase(v.key);//½«ÒÑ¾­±»ÇıÖğµÄÔªËØ´ÓstashÉ¾³ı È«¾Ö
-			//stash.erase(v.first);//É¾³ıËùÓĞÒÑ¾­Çı³ıµÄÔªËØ£¬´Óstash
+			//removed[v.key] = v;//æ ‡è®°ä¸ºåˆ é™¤
+			stash.erase(v.key);//å°†å·²ç»è¢«é©±é€çš„å…ƒç´ ä»stashåˆ é™¤ å…¨å±€
+			//stash.erase(v.first);//åˆ é™¤æ‰€æœ‰å·²ç»é©±é™¤çš„å…ƒç´ ï¼Œä»stash
 		}
 	}
 
 }
 
-//²ÉÓÃ±¿°ì·¨ Õë¶ÔÒ»²ãÇ¿ÖÆ±éÀú
+//é‡‡ç”¨ç¬¨åŠæ³• é’ˆå¯¹ä¸€å±‚å¼ºåˆ¶éå†
 void ORAMtree::evictPathAtLevel(unordered_map<string, TreeNode>& pathNodes, KeyValues& removed, vector<Slot> slots, ull leaf,int level)
 {
 	CPath64 currentLeaf(leaf);
 
 	//unordered_map<ulong, int> removed;
 	//KeyValues removed;
-	//sortByLeafDistance(slots, leaf);//°´ÕÕ¿¿½üÒ¶×ÓµÄË³ĞòÅÅĞò£¬ÇıÖğËã·¨
+	//sortByLeafDistance(slots, leaf);//æŒ‰ç…§é è¿‘å¶å­çš„é¡ºåºæ’åºï¼Œé©±é€ç®—æ³•
 	//KeyValues temp;
 
-	//´Ólevel²ã¿ªÊ¼É¨Ãè
+	//ä»levelå±‚å¼€å§‹æ‰«æ
 	int j = 0;
 	int i = level;
 
 		TreeNode node;
 		string p1 = currentLeaf.AtLevelPath(i);
-		node = pathNodes[p1];//Èç¹ûpathNodesÖĞ²»°üº¬ p1£¬Ôò»á²åÈëÒ»¸ö¿ÕµÄ½Úµã Õ¼Î»
+		node = pathNodes[p1];//å¦‚æœpathNodesä¸­ä¸åŒ…å« p1ï¼Œåˆ™ä¼šæ’å…¥ä¸€ä¸ªç©ºçš„èŠ‚ç‚¹ å ä½
 		node.path = p1;
 		node.level = p1.length();
 
-		//for (int k = 0; k < P.Z; k++) //Ã¿Ò»²ã³¢ÊÔZ´ÎÇıÖğ
+		//for (int k = 0; k < P.Z; k++) //æ¯ä¸€å±‚å°è¯•Zæ¬¡é©±é€
 			for (auto& v : slots)
-				//if (j < slots.size())//½«ËùÓĞµÄslotÇıÖğµ½ Ê÷ÀïÃæ
+				//if (j < slots.size())//å°†æ‰€æœ‰çš„sloté©±é€åˆ° æ ‘é‡Œé¢
 			{
-				//if (temp.find(v.key) != temp.end()) continue;//ÒÑ¾­Ê¹ÓÃ
+				//if (temp.find(v.key) != temp.end()) continue;//å·²ç»ä½¿ç”¨
 				//	int level = path64.Cross(leaf, v.second.leaf).GetLevel();
 				//Slot v = slots[j];			
-				string p2 = CPath64(v.leaf).AtLevelPath(i); //´ËËã·¨Ğ§ÂÊ²»¸ß£¬
-			//	if (removed[v.key].leaf > 0) continue;//±íÊ¾ÒÑ¾­É¾³ıÁË//²»ĞèÒªÅĞ¶ÏÁË£¬´Ë´¦ÒÑ¾­±êÊ¶
-				if (p1 == p2) //ÒòÎª±»ÇıÖğµÄ½Úµã¿ÉÄÜ²»ÊÇ×î½üµÄ½Úµã£¬
+				string p2 = CPath64(v.leaf).AtLevelPath(i); //æ­¤ç®—æ³•æ•ˆç‡ä¸é«˜ï¼Œ
+			//	if (removed[v.key].leaf > 0) continue;//è¡¨ç¤ºå·²ç»åˆ é™¤äº†//ä¸éœ€è¦åˆ¤æ–­äº†ï¼Œæ­¤å¤„å·²ç»æ ‡è¯†
+				if (p1 == p2) //å› ä¸ºè¢«é©±é€çš„èŠ‚ç‚¹å¯èƒ½ä¸æ˜¯æœ€è¿‘çš„èŠ‚ç‚¹ï¼Œ
 				{
 					Slot s;
 					s = v;
 					//	if (i == 1)
 					//	{
-					//		node.slots.push_back(s);//È«²¿¼ÓÈë ²»×öÅĞ¶ÏÁË ¸ú½Úµã
+					//		node.slots.push_back(s);//å…¨éƒ¨åŠ å…¥ ä¸åšåˆ¤æ–­äº† è·ŸèŠ‚ç‚¹
 					//		if (node.slots.size() >= P.max_S)
 					//		{
 					//			P.max_S = node.slots.size();
@@ -1009,29 +1009,29 @@ void ORAMtree::evictPathAtLevel(unordered_map<string, TreeNode>& pathNodes, KeyV
 					//		{
 					//			node.slots.push_back(s);
 					//			//removed[s.key] = s;
-					//			j++;//ÒÑ¾­Ê¹ÓÃÁË´Ë½Úµã
+					//			j++;//å·²ç»ä½¿ç”¨äº†æ­¤èŠ‚ç‚¹
 					//		}
 					//		else
 					//		{
-					//			break;//½ÚµãÂú
+					//			break;//èŠ‚ç‚¹æ»¡
 					//		}
 					//	}
 					//	else
 						//{
 					if (node.slots.size() < P.Z)
 					{
-						if (removed.find(s.key) == removed.end())//Èç¹ûÃ»ÓĞ±»É¾³ı
+						if (removed.find(s.key) == removed.end())//å¦‚æœæ²¡æœ‰è¢«åˆ é™¤
 						{
 							node.slots.push_back(s);
-							//j++;//ÒÑ¾­Ê¹ÓÃÁË
-							removed[s.key] = s;//±ê¼ÇÎªÒÑ¾­É¾³ı
+							//j++;//å·²ç»ä½¿ç”¨äº†
+							removed[s.key] = s;//æ ‡è®°ä¸ºå·²ç»åˆ é™¤
 							//temp[s.key] = s;
 							stash.erase(s.key);
 						};
 					}
 					else
 					{
-						break;//½ÚµãÂú
+						break;//èŠ‚ç‚¹æ»¡
 					}
 					//}
 				}
@@ -1041,51 +1041,51 @@ void ORAMtree::evictPathAtLevel(unordered_map<string, TreeNode>& pathNodes, KeyV
 			//for (auto & v : removed)
 		//{
 			//slots.erase(&v);
-			//removed[v.key] = v;//±ê¼ÇÎªÉ¾³ı
-			//stash.erase(v.key);//½«ÒÑ¾­±»ÇıÖğµÄÔªËØ´ÓstashÉ¾³ı È«¾Ö
-			//stash.erase(v.first);//É¾³ıËùÓĞÒÑ¾­Çı³ıµÄÔªËØ£¬´Óstash
+			//removed[v.key] = v;//æ ‡è®°ä¸ºåˆ é™¤
+			//stash.erase(v.key);//å°†å·²ç»è¢«é©±é€çš„å…ƒç´ ä»stashåˆ é™¤ å…¨å±€
+			//stash.erase(v.first);//åˆ é™¤æ‰€æœ‰å·²ç»é©±é™¤çš„å…ƒç´ ï¼Œä»stash
 		//}
 
 
 }
 
 
-//²ÉÓÃ±¿°ì·¨ Ã¿Ò»²ã¶¼Ç¿ÖÆ±éÀú
+//é‡‡ç”¨ç¬¨åŠæ³• æ¯ä¸€å±‚éƒ½å¼ºåˆ¶éå†
 void ORAMtree::evictPath3(unordered_map<string, TreeNode>& pathNodes, vector<Slot> slots, ull leaf)
 {
 	CPath64 currentLeaf(leaf);
 
 	//unordered_map<ulong, int> removed;
 	//KeyValues removed;
-	//sortByLeafDistance(slots, leaf);//°´ÕÕ¿¿½üÒ¶×ÓµÄË³ĞòÅÅĞò£¬ÇıÖğËã·¨
+	//sortByLeafDistance(slots, leaf);//æŒ‰ç…§é è¿‘å¶å­çš„é¡ºåºæ’åºï¼Œé©±é€ç®—æ³•
 	KeyValues temp;
 
-	//´Ó×îµ×²ã¿ªÊ¼É¨Ãè
+	//ä»æœ€åº•å±‚å¼€å§‹æ‰«æ
 	int j = 0;
-	for (int i = P.L; i >= 1; i--)//´Ó×îµ×²ã¿ªÊ¼ µ½×îÉÏ²ã
+	for (int i = P.L; i >= 1; i--)//ä»æœ€åº•å±‚å¼€å§‹ åˆ°æœ€ä¸Šå±‚
 	{
 		TreeNode node;
 		string p1 = currentLeaf.AtLevelPath(i);
-		node = pathNodes[p1];//Èç¹ûpathNodesÖĞ²»°üº¬ p1£¬Ôò»á²åÈëÒ»¸ö¿ÕµÄ½Úµã Õ¼Î»
+		node = pathNodes[p1];//å¦‚æœpathNodesä¸­ä¸åŒ…å« p1ï¼Œåˆ™ä¼šæ’å…¥ä¸€ä¸ªç©ºçš„èŠ‚ç‚¹ å ä½
 		node.path = p1;
 		node.level = p1.length();
 	
-		for (int k = 0; k < P.Z; k++) //Ã¿Ò»²ã³¢ÊÔZ´ÎÇıÖğ
+		for (int k = 0; k < P.Z; k++) //æ¯ä¸€å±‚å°è¯•Zæ¬¡é©±é€
 			for(auto& v: slots)
-			//if (j < slots.size())//½«ËùÓĞµÄslotÇıÖğµ½ Ê÷ÀïÃæ
+			//if (j < slots.size())//å°†æ‰€æœ‰çš„sloté©±é€åˆ° æ ‘é‡Œé¢
 			{
-				if (temp.find(v.key)!=temp.end()) continue;//ÒÑ¾­Ê¹ÓÃ
+				if (temp.find(v.key)!=temp.end()) continue;//å·²ç»ä½¿ç”¨
 				//	int level = path64.Cross(leaf, v.second.leaf).GetLevel();
 				//Slot v = slots[j];			
-				string p2 = CPath64(v.leaf).AtLevelPath(i); //´ËËã·¨Ğ§ÂÊ²»¸ß£¬
-			//	if (removed[v.key].leaf > 0) continue;//±íÊ¾ÒÑ¾­É¾³ıÁË//²»ĞèÒªÅĞ¶ÏÁË£¬´Ë´¦ÒÑ¾­±êÊ¶
-				if (p1 == p2) //ÒòÎª±»ÇıÖğµÄ½Úµã¿ÉÄÜ²»ÊÇ×î½üµÄ½Úµã£¬
+				string p2 = CPath64(v.leaf).AtLevelPath(i); //æ­¤ç®—æ³•æ•ˆç‡ä¸é«˜ï¼Œ
+			//	if (removed[v.key].leaf > 0) continue;//è¡¨ç¤ºå·²ç»åˆ é™¤äº†//ä¸éœ€è¦åˆ¤æ–­äº†ï¼Œæ­¤å¤„å·²ç»æ ‡è¯†
+				if (p1 == p2) //å› ä¸ºè¢«é©±é€çš„èŠ‚ç‚¹å¯èƒ½ä¸æ˜¯æœ€è¿‘çš„èŠ‚ç‚¹ï¼Œ
 				{
 					Slot s;
 					s = v;
 					//	if (i == 1)
 					//	{
-					//		node.slots.push_back(s);//È«²¿¼ÓÈë ²»×öÅĞ¶ÏÁË ¸ú½Úµã
+					//		node.slots.push_back(s);//å…¨éƒ¨åŠ å…¥ ä¸åšåˆ¤æ–­äº† è·ŸèŠ‚ç‚¹
 					//		if (node.slots.size() >= P.max_S)
 					//		{
 					//			P.max_S = node.slots.size();
@@ -1094,11 +1094,11 @@ void ORAMtree::evictPath3(unordered_map<string, TreeNode>& pathNodes, vector<Slo
 					//		{
 					//			node.slots.push_back(s);
 					//			//removed[s.key] = s;
-					//			j++;//ÒÑ¾­Ê¹ÓÃÁË´Ë½Úµã
+					//			j++;//å·²ç»ä½¿ç”¨äº†æ­¤èŠ‚ç‚¹
 					//		}
 					//		else
 					//		{
-					//			break;//½ÚµãÂú
+					//			break;//èŠ‚ç‚¹æ»¡
 					//		}
 					//	}
 					//	else
@@ -1106,14 +1106,14 @@ void ORAMtree::evictPath3(unordered_map<string, TreeNode>& pathNodes, vector<Slo
 					if (node.slots.size() < P.Z)
 					{
 						node.slots.push_back(s);
-						//j++;//ÒÑ¾­Ê¹ÓÃÁË
+						//j++;//å·²ç»ä½¿ç”¨äº†
 						//removed[s.key] = s;
 						temp[s.key] = s;
 						stash.erase(s.key);
 					}
 					else
 					{
-						break;//½ÚµãÂú
+						break;//èŠ‚ç‚¹æ»¡
 					}
 					//}
 				}
@@ -1123,20 +1123,20 @@ void ORAMtree::evictPath3(unordered_map<string, TreeNode>& pathNodes, vector<Slo
 			//for (auto & v : removed)
 		//{
 			//slots.erase(&v);
-			//removed[v.key] = v;//±ê¼ÇÎªÉ¾³ı
-			//stash.erase(v.key);//½«ÒÑ¾­±»ÇıÖğµÄÔªËØ´ÓstashÉ¾³ı È«¾Ö
-			//stash.erase(v.first);//É¾³ıËùÓĞÒÑ¾­Çı³ıµÄÔªËØ£¬´Óstash
+			//removed[v.key] = v;//æ ‡è®°ä¸ºåˆ é™¤
+			//stash.erase(v.key);//å°†å·²ç»è¢«é©±é€çš„å…ƒç´ ä»stashåˆ é™¤ å…¨å±€
+			//stash.erase(v.first);//åˆ é™¤æ‰€æœ‰å·²ç»é©±é™¤çš„å…ƒç´ ï¼Œä»stash
 		//}
 	}
 
 }
 
-//Õâ¸öËã·¨ÏûºÄÊ±¼äÌ«¶à ËÆºõÓĞBUG
+//è¿™ä¸ªç®—æ³•æ¶ˆè€—æ—¶é—´å¤ªå¤š ä¼¼ä¹æœ‰BUG
 void ORAMtree::evictPath2(unordered_map<string, TreeNode>& pathNodes, vector<Slot> slots, ull leaf)
 {
 	CPath64 currentLeaf(leaf);
 	KeyValues temp;
-	//¼ÙÉèslotsÀïÃæÒÑ¾­ÅÅĞòºÃÁË °´ÕÕÒ¶×Ó´ÓĞ¡µ½´ó
+	//å‡è®¾slotsé‡Œé¢å·²ç»æ’åºå¥½äº† æŒ‰ç…§å¶å­ä»å°åˆ°å¤§
 	for (int i = P.L; i >= 1; i--)
 	{
 		TreeNode node;
@@ -1147,7 +1147,7 @@ void ORAMtree::evictPath2(unordered_map<string, TreeNode>& pathNodes, vector<Slo
 		}
 		else
 		{
-			Z_results = slots;//½«ËùÓĞµÄ½Úµã²åÈë¸ù²¿
+			Z_results = slots;//å°†æ‰€æœ‰çš„èŠ‚ç‚¹æ’å…¥æ ¹éƒ¨
 		}
 		for (auto v : Z_results)
 		{
@@ -1161,14 +1161,14 @@ void ORAMtree::evictPath2(unordered_map<string, TreeNode>& pathNodes, vector<Slo
 				node = pathNodes[p1];
 				if (i == 1)
 				{
-					//node.slots.push_back(s);//È«²¿¼ÓÈë ²»×öÅĞ¶ÏÁË ¸ú½Úµã
+					//node.slots.push_back(s);//å…¨éƒ¨åŠ å…¥ ä¸åšåˆ¤æ–­äº† è·ŸèŠ‚ç‚¹
 					if (node.slots.size() < P.S)
 					{
 						node.slots.push_back(s);
 					}
 					else
 					{
-						break;//½ÚµãÂú
+						break;//èŠ‚ç‚¹æ»¡
 					}
 				}
 				else
@@ -1179,15 +1179,15 @@ void ORAMtree::evictPath2(unordered_map<string, TreeNode>& pathNodes, vector<Slo
 					}
 					else
 					{
-						break;//½ÚµãÂú
+						break;//èŠ‚ç‚¹æ»¡
 					}
 				}
 				pathNodes[p1] = node;
 			}
 		}
-		for (auto& v : node.slots)//É¾³ıÒÑ¾­Ê¹ÓÃÁËµÄ¿é
+		for (auto& v : node.slots)//åˆ é™¤å·²ç»ä½¿ç”¨äº†çš„å—
 		{
-			DeleteOneSlotFromVector(slots, v);//É¾³ıËã·¨ÏûºÄµÄÊ±¼äÌ«¶à
+			DeleteOneSlotFromVector(slots, v);//åˆ é™¤ç®—æ³•æ¶ˆè€—çš„æ—¶é—´å¤ªå¤š
 			stash.erase(v.key);
 		}
 	}
@@ -1245,10 +1245,10 @@ void ORAMtree::EncryptPaths(unordered_map<string, TreeNode>& pathNodes,ENodes &e
 	for (auto &v : pathNodes)
 	{
 		TreeNode node= v.second;
-	//	w_block_count += node.slots.size();//·Ç¿ÕµÄ¿éÔö¼Ó£¬ÊÇ×îÖÕµÄÔÆ·şÎñÆ÷ÉÏµÄw-block¿éÊı
+	//	w_block_count += node.slots.size();//éç©ºçš„å—å¢åŠ ï¼Œæ˜¯æœ€ç»ˆçš„äº‘æœåŠ¡å™¨ä¸Šçš„w-blockå—æ•°
 		if (v.first != "")
 		{
-			while (node.slots.size() < P.Z) //¶ÔÆë
+			while (node.slots.size() < P.Z) //å¯¹é½
 			{
 				Slot empty = { 0 };
 				empty.value= EmptyBlock();
@@ -1257,9 +1257,9 @@ void ORAMtree::EncryptPaths(unordered_map<string, TreeNode>& pathNodes,ENodes &e
 		}
 		node.path = v.first;
 		node.level = v.first.length()+1;
-		if (node.level == 1) //µ÷ÊÔÊ¹ÓÃ ¸ú×Ùroot½ÚµãÒç³öÇé¿ö
+		if (node.level == 1) //è°ƒè¯•ä½¿ç”¨ è·Ÿè¸ªrootèŠ‚ç‚¹æº¢å‡ºæƒ…å†µ
 		{
-			while (node.slots.size() < P.S) //¶ÔÆë
+			while (node.slots.size() < P.S) //å¯¹é½
 			{
 				Slot empty = { 0 };
 				empty.value = EmptyBlock();
@@ -1271,7 +1271,7 @@ void ORAMtree::EncryptPaths(unordered_map<string, TreeNode>& pathNodes,ENodes &e
 		//		P.n_root_exceed_S++;
 		//		if (node.slots.size() > P.Max_S)
 		//		{
-		//			P.Max_S = node.slots.size();//Òç³öµÄ×î´óÖµ
+		//			P.Max_S = node.slots.size();//æº¢å‡ºçš„æœ€å¤§å€¼
 		//		}
 				//printf("\r\n exceed S root_size=%d", node.slots.size());
 			//}
@@ -1283,7 +1283,7 @@ void ORAMtree::EncryptPaths(unordered_map<string, TreeNode>& pathNodes,ENodes &e
 }
 
 //separation point
-//·µ»Ø½»²æ½Úµã£¬µÄ×ó±ßº¢×Ó£¬µÄ×î´óµÄÒ¶×Ó½Úµã£¬×÷Îª·Ö¸ôµã
+//è¿”å›äº¤å‰èŠ‚ç‚¹ï¼Œçš„å·¦è¾¹å­©å­ï¼Œçš„æœ€å¤§çš„å¶å­èŠ‚ç‚¹ï¼Œä½œä¸ºåˆ†éš”ç‚¹
 unsigned long long ORAMtree::separationPoint(unsigned long long leaf1, unsigned long long leaf2)
 {
 	unsigned long long crossnode = cross(leaf1, leaf2);
@@ -1295,7 +1295,7 @@ unsigned long long ORAMtree::separationPoint(unsigned long long leaf1, unsigned 
 	}
 	return MaxChildLeaf;
 }
-//ÏÈ½«ËùÓĞµÄslot °´Ò¶×ÓÎ»ÖÃÅÅĞò£¬È»ºó°´ÕÕleafs·ÖÇø
+//å…ˆå°†æ‰€æœ‰çš„slot æŒ‰å¶å­ä½ç½®æ’åºï¼Œç„¶åæŒ‰ç…§leafsåˆ†åŒº
 ENodes ORAMtree::RebuildPaths_PBEA(vector<ull>& leafs, int evictOption) //
 {
 	ENodes enodes;
@@ -1311,7 +1311,7 @@ ENodes ORAMtree::RebuildPaths_PBEA(vector<ull>& leafs, int evictOption) //
 		{
 			string path = p.ToString();
 			if (path == "") break;
-			pathNodes[path] = d;//³õÊ¼»¯
+			pathNodes[path] = d;//åˆå§‹åŒ–
 			p = p.Father();
 		}
 	}
@@ -1319,7 +1319,7 @@ ENodes ORAMtree::RebuildPaths_PBEA(vector<ull>& leafs, int evictOption) //
 	{
 		stashArray.push_back(v.second);
 	};
-	sort(stashArray.begin(), stashArray.end(), LessSortByLeaf);	//ÏÈ½«stashÖĞµÄÎïÌå°´ÕÕÒ¶×ÓÎ»ÖÃÅÅĞò£¬´ÓĞ¡µ½´ó
+	sort(stashArray.begin(), stashArray.end(), LessSortByLeaf);	//å…ˆå°†stashä¸­çš„ç‰©ä½“æŒ‰ç…§å¶å­ä½ç½®æ’åºï¼Œä»å°åˆ°å¤§
 	sort(leafs.begin(), leafs.end());
 	ull div = 0;
 	bool bComputeNextLeaf = false;
@@ -1335,7 +1335,7 @@ ENodes ORAMtree::RebuildPaths_PBEA(vector<ull>& leafs, int evictOption) //
 		div = this->P.firstLeafID + PAGESIZE * i;
 		if (v.leaf >= div)
 		{
-			//div = separationPoint(leafs[k], leafs[k+1]);//¸ÄÓÃÕâÖÖ cross½ÚµãµÄ×Ó½ÚµãµÄ·½Ê½
+			//div = separationPoint(leafs[k], leafs[k+1]);//æ”¹ç”¨è¿™ç§ crossèŠ‚ç‚¹çš„å­èŠ‚ç‚¹çš„æ–¹å¼
 			i++;
 			while ((k < leafs.size()) && (leafs[k] < div))
 			{
@@ -1355,7 +1355,7 @@ ENodes ORAMtree::RebuildPaths_PBEA(vector<ull>& leafs, int evictOption) //
 		}
 		
 	}
-	if (subStashArray.size() > 0)//Èç¹ûÈÔÈ»ÓĞÊı¾İĞèÒªÇıÖğ
+	if (subStashArray.size() > 0)//å¦‚æœä»ç„¶æœ‰æ•°æ®éœ€è¦é©±é€
 	{
 		while ((k < leafs.size()) && (leafs[k] <= div))
 		{
@@ -1366,11 +1366,11 @@ ENodes ORAMtree::RebuildPaths_PBEA(vector<ull>& leafs, int evictOption) //
 		subLeafs.clear();
 		subStashArray.clear();
 	}
-	evict_Paths_KNNEA(pathNodes, leafs);//½«Ê£ÓàµÄÇıÖğÒ»´Î
+	evict_Paths_KNNEA(pathNodes, leafs);//å°†å‰©ä½™çš„é©±é€ä¸€æ¬¡
 	EncryptPaths(pathNodes, enodes);
 	return enodes;
 }
-//ÏÈ½«ËùÓĞµÄslot °´Ò¶×ÓÎ»ÖÃÅÅĞò£¬È»ºó°´ÕÕleafs·ÖÇø ,ÕâÊÇÀÏµÄ·Ö¸ô·½·¨£¬Ã»ÓĞ½«Êı¾İ²åÈëµ½µ×²¿£¬²»ÊÇ×îÓÅËã·¨
+//å…ˆå°†æ‰€æœ‰çš„slot æŒ‰å¶å­ä½ç½®æ’åºï¼Œç„¶åæŒ‰ç…§leafsåˆ†åŒº ,è¿™æ˜¯è€çš„åˆ†éš”æ–¹æ³•ï¼Œæ²¡æœ‰å°†æ•°æ®æ’å…¥åˆ°åº•éƒ¨ï¼Œä¸æ˜¯æœ€ä¼˜ç®—æ³•
 ENodes ORAMtree::RebuildPaths_PartitionFirstOld(vector<ull>& leafs,int evictOption) //
 {
 	ENodes enodes;
@@ -1386,7 +1386,7 @@ ENodes ORAMtree::RebuildPaths_PartitionFirstOld(vector<ull>& leafs,int evictOpti
 		{
 			string path = p.ToString();
 			if (path == "") break;
-			pathNodes[path] = d;//³õÊ¼»¯
+			pathNodes[path] = d;//åˆå§‹åŒ–
 			p = p.Father();
 		}
 	}
@@ -1394,14 +1394,14 @@ ENodes ORAMtree::RebuildPaths_PartitionFirstOld(vector<ull>& leafs,int evictOpti
 	{
 		stashArray.push_back(v.second);
 	};
-	sort(stashArray.begin(), stashArray.end(), LessSortByLeaf);	//ÏÈ½«stashÖĞµÄÎïÌå°´ÕÕÒ¶×ÓÎ»ÖÃÅÅĞò£¬´ÓĞ¡µ½´ó
+	sort(stashArray.begin(), stashArray.end(), LessSortByLeaf);	//å…ˆå°†stashä¸­çš„ç‰©ä½“æŒ‰ç…§å¶å­ä½ç½®æ’åºï¼Œä»å°åˆ°å¤§
 	sort(leafs.begin(), leafs.end());
 	ull div=0;
 	bool bComputeNextLeaf = false;
 	if (leafs.size() == 1) div = pow(2, P.L) - 2;
 	else
 		//div = (leafs[0] + leafs[1]) / 2;		
-		div = separationPoint(leafs[0], leafs[1]);//¸ÄÓÃÕâÖÖ cross½ÚµãµÄ×Ó½ÚµãµÄ·½Ê½ ÕâÖÖ·½Ê½£¬Ò»Ğ©¿¿½üÒ¶×ÓµÄ½Úµã£¬²»Ò»¶¨¿ÉÒÔ±»²åÈëµ½µ±Ç°Â·¾¶ÖĞ£¬·´¶øÒ»Ğ©Ô¶µÄ½Úµã¿ÉÒÔ±»²åÈëµ½µ±Ç°Â·¾¶ÖĞ
+		div = separationPoint(leafs[0], leafs[1]);//æ”¹ç”¨è¿™ç§ crossèŠ‚ç‚¹çš„å­èŠ‚ç‚¹çš„æ–¹å¼ è¿™ç§æ–¹å¼ï¼Œä¸€äº›é è¿‘å¶å­çš„èŠ‚ç‚¹ï¼Œä¸ä¸€å®šå¯ä»¥è¢«æ’å…¥åˆ°å½“å‰è·¯å¾„ä¸­ï¼Œåè€Œä¸€äº›è¿œçš„èŠ‚ç‚¹å¯ä»¥è¢«æ’å…¥åˆ°å½“å‰è·¯å¾„ä¸­
 
 	int k = 0;
 	for (auto v : stashArray)
@@ -1422,7 +1422,7 @@ ENodes ORAMtree::RebuildPaths_PartitionFirstOld(vector<ull>& leafs,int evictOpti
 				div = pow(2, P.L) - 2;
 			else
 				div = (leafs[k] + leafs[k+1]) / 2;
-				//div = separationPoint(leafs[k], leafs[k+1]);//¸ÄÓÃÕâÖÖ cross½ÚµãµÄ×Ó½ÚµãµÄ·½Ê½
+				//div = separationPoint(leafs[k], leafs[k+1]);//æ”¹ç”¨è¿™ç§ crossèŠ‚ç‚¹çš„å­èŠ‚ç‚¹çš„æ–¹å¼
 			k++;
 		}
 		slots.push_back(v);
@@ -1431,15 +1431,15 @@ ENodes ORAMtree::RebuildPaths_PartitionFirstOld(vector<ull>& leafs,int evictOpti
 	{
 		if (evictOption == 0)
 		{
-			evictPath(pathNodes, slots, leafs[leafs.size() - 1]);//×îºóµÄÒ¶×Ó
+			evictPath(pathNodes, slots, leafs[leafs.size() - 1]);//æœ€åçš„å¶å­
 		}
 		else
 		{
-			//evictPath1(pathNodes, slots, leafs[leafs.size() - 1]);//×îºóµÄÒ¶×Ó
-			evictPath3(pathNodes, slots, leafs[leafs.size() - 1]);//×îºóµÄÒ¶×Ó
+			//evictPath1(pathNodes, slots, leafs[leafs.size() - 1]);//æœ€åçš„å¶å­
+			evictPath3(pathNodes, slots, leafs[leafs.size() - 1]);//æœ€åçš„å¶å­
 		}
 	}
-	if (stash.size() > 0)//Èç¹ûÈÔÈ»ÓĞÊı¾İĞèÒªÇıÖğ
+	if (stash.size() > 0)//å¦‚æœä»ç„¶æœ‰æ•°æ®éœ€è¦é©±é€
 	{
 		evict_Paths_KNNEA(pathNodes, leafs);
 		//evictPathsDFEA(pathNodes, leafs); //DFEA
@@ -1448,7 +1448,7 @@ ENodes ORAMtree::RebuildPaths_PartitionFirstOld(vector<ull>& leafs,int evictOpti
 	return enodes;
 }
 
-//ÏÈ½«ËùÓĞµÄslot °´Ò¶×ÓÎ»ÖÃÅÅĞò£¬È»ºó°´ÕÕleafs·ÖÇø ·ÖÇøÖØµş£¬Ğ§ÂÊ·Ç³£µÍ
+//å…ˆå°†æ‰€æœ‰çš„slot æŒ‰å¶å­ä½ç½®æ’åºï¼Œç„¶åæŒ‰ç…§leafsåˆ†åŒº åˆ†åŒºé‡å ï¼Œæ•ˆç‡éå¸¸ä½
 ENodes ORAMtree::RebuildPaths_StackedLocation(vector<ull>& leafs, int evictOption) //
 {
 	ENodes enodes;
@@ -1465,7 +1465,7 @@ ENodes ORAMtree::RebuildPaths_StackedLocation(vector<ull>& leafs, int evictOptio
 		{
 			string path = p.ToString();
 			if (path == "") break;
-			pathNodes[path] = d;//³õÊ¼»¯
+			pathNodes[path] = d;//åˆå§‹åŒ–
 			p = p.Father();
 		}
 	}
@@ -1473,7 +1473,7 @@ ENodes ORAMtree::RebuildPaths_StackedLocation(vector<ull>& leafs, int evictOptio
 	{
 		stashArray.push_back(v.second);
 	};
-	sort(stashArray.begin(), stashArray.end(), LessSortByLeaf);	//ÏÈ½«stashÖĞµÄÎïÌå°´ÕÕÒ¶×ÓÎ»ÖÃÅÅĞò£¬´ÓĞ¡µ½´ó
+	sort(stashArray.begin(), stashArray.end(), LessSortByLeaf);	//å…ˆå°†stashä¸­çš„ç‰©ä½“æŒ‰ç…§å¶å­ä½ç½®æ’åºï¼Œä»å°åˆ°å¤§
 	sort(leafs.begin(), leafs.end());
 	ull div = 0;
 	bool bComputeNextLeaf = false;
@@ -1494,13 +1494,13 @@ ENodes ORAMtree::RebuildPaths_StackedLocation(vector<ull>& leafs, int evictOptio
 	for (auto& v : divs)
 	{
 		vector<Slot> s;
-		for (int i=0;i<3*P.Z*P.L;i++) //ÓÒ±ßËÑË÷ Z*L
+		for (int i=0;i<3*P.Z*P.L;i++) //å³è¾¹æœç´¢ Z*L
 		{
 			//
 			if(v+i<stashArray.size())
 			s.push_back(stashArray[v+i]);
 		}
-		for (int i = 1; i <= 3*P.Z * P.L; i++)//×ó±ßËÑË÷ Z*L
+		for (int i = 1; i <= 3*P.Z * P.L; i++)//å·¦è¾¹æœç´¢ Z*L
 		{
 			//
 			if(v-i>0) s.push_back(stashArray[v-i]);
@@ -1541,7 +1541,7 @@ ENodes ORAMtree::RebuildPaths(vector<ull>& leafs,int option) //
 }
 
 
-//¼ÙÉèÊı¾İÒÑ¾­¶¼ÔÚstashÖĞÁË£¬×¼±¸Ï´ÅÆ ĞÂËã·¨£¬ÏÈ¶ÔËùÓĞµÄ½ÚµãÅÅĞò£¬´Óµ×²¿µ½¶¥²¿,ÒÔÇ°µÄËã·¨ KNNEA
+//å‡è®¾æ•°æ®å·²ç»éƒ½åœ¨stashä¸­äº†ï¼Œå‡†å¤‡æ´—ç‰Œ æ–°ç®—æ³•ï¼Œå…ˆå¯¹æ‰€æœ‰çš„èŠ‚ç‚¹æ’åºï¼Œä»åº•éƒ¨åˆ°é¡¶éƒ¨,ä»¥å‰çš„ç®—æ³• KNNEA
 ENodes ORAMtree::RebuildPaths_nopartition(vector<ull>& leafs) //
 {
 	ENodes enodes;
@@ -1552,7 +1552,7 @@ ENodes ORAMtree::RebuildPaths_nopartition(vector<ull>& leafs) //
 	{
 		stashArray.push_back(v.second);
 	};
-	sort(stashArray.begin(), stashArray.end(), LessSortByLeaf);	//ÏÈ½«stashÖĞµÄÎïÌå°´ÕÕÒ¶×ÓÎ»ÖÃÅÅĞò£¬´ÓĞ¡µ½´ó
+	sort(stashArray.begin(), stashArray.end(), LessSortByLeaf);	//å…ˆå°†stashä¸­çš„ç‰©ä½“æŒ‰ç…§å¶å­ä½ç½®æ’åºï¼Œä»å°åˆ°å¤§
 	debug.BottomToTop_removeTime = 0;
 	for (int i = P.L; i >= 1; i--)
 	{
@@ -1565,15 +1565,15 @@ ENodes ORAMtree::RebuildPaths_nopartition(vector<ull>& leafs) //
 			ENode enode;
 			CPath64 currentLeaf(leaf);
 			string path = currentLeaf.AtLevelPath(i);
-			if (enodes.find(path) != enodes.end()) continue;//ÒÑ¾­ÌîºÃÕâ¸ö½ÚµãµÄÊı¾İÁË È¥³ıÖØ¸´
+			if (enodes.find(path) != enodes.end()) continue;//å·²ç»å¡«å¥½è¿™ä¸ªèŠ‚ç‚¹çš„æ•°æ®äº† å»é™¤é‡å¤
 			vector<Slot> Z_results;
 			//if (i > 1)
 			//{
-			FindZNearbySlotFromVector(stashArray, leaf, Z_results, P.Z*2+1);//×óÓÒ¸÷Z¸öÔªËØ ²»ÄÜÖ»ÓĞZ¸öÔªËØ
+			FindZNearbySlotFromVector(stashArray, leaf, Z_results, P.Z*2+1);//å·¦å³å„Zä¸ªå…ƒç´  ä¸èƒ½åªæœ‰Zä¸ªå…ƒç´ 
 			//}
 			//else
 			//{
-			//	Z_results = stashArray;//½«ËùÓĞµÄ½Úµã²åÈë¸ù²¿
+			//	Z_results = stashArray;//å°†æ‰€æœ‰çš„èŠ‚ç‚¹æ’å…¥æ ¹éƒ¨
 			//}
 			for (auto& v : Z_results)
 			{
@@ -1595,7 +1595,7 @@ ENodes ORAMtree::RebuildPaths_nopartition(vector<ull>& leafs) //
 				//		}
 				//		else
 				//		{
-				//			break;//½ÚµãÂú
+				//			break;//èŠ‚ç‚¹æ»¡
 				//		}
 				//	}
 				//	else
@@ -1606,7 +1606,7 @@ ENodes ORAMtree::RebuildPaths_nopartition(vector<ull>& leafs) //
 						}
 						else
 						{
-							break;//½ÚµãÂú
+							break;//èŠ‚ç‚¹æ»¡
 						}
 				//	}
 				}
@@ -1614,15 +1614,15 @@ ENodes ORAMtree::RebuildPaths_nopartition(vector<ull>& leafs) //
 			int max = P.Z;
 			//if (i == 1) max = P.S;
 			double t1 = time_ms();
-			for (auto v : node.slots)//É¾³ıÒÑ¾­Ê¹ÓÃÁËµÄ¿é
+			for (auto v : node.slots)//åˆ é™¤å·²ç»ä½¿ç”¨äº†çš„å—
 			{							
-				DeleteOneSlotFromVector(stashArray, v);//É¾³ıËã·¨ÏûºÄµÄÊ±¼äÌ«¶à
+				DeleteOneSlotFromVector(stashArray, v);//åˆ é™¤ç®—æ³•æ¶ˆè€—çš„æ—¶é—´å¤ªå¤š
 				debug.BottomToTop_stashRemove++;
 				stash.erase(v.key);
 			}
 			double t2 = time_ms();
 			debug.BottomToTop_removeTime += (t2 - t1);
-			while (node.slots.size() < max) //¶ÔÆë
+			while (node.slots.size() < max) //å¯¹é½
 			{
 				Slot empty = { 0 };
 				empty.value = EmptyBlock();
@@ -1637,7 +1637,7 @@ ENodes ORAMtree::RebuildPaths_nopartition(vector<ull>& leafs) //
 			//		P.n_root_exceed_S++;
 			//		if (node.slots.size()> P.Max_S)
 			//		{
-			//			P.Max_S = node.slots.size();//Òç³öµÄ×î´óÖµ
+			//			P.Max_S = node.slots.size();//æº¢å‡ºçš„æœ€å¤§å€¼
 			//		}
 					//printf("\r\n exceed S root_size=%d", node.slots.size());
 			//	}
@@ -1649,7 +1649,7 @@ ENodes ORAMtree::RebuildPaths_nopartition(vector<ull>& leafs) //
 	return enodes;
 }
 
-//KNNEA Ëã·¨ ²¿·ÖÇıÖğ
+//KNNEA ç®—æ³• éƒ¨åˆ†é©±é€
 void ORAMtree::evict_Paths_KNNEA(unordered_map<string, TreeNode>& pathNodes, vector<Slot>& stashArray, vector<ull>& leafs) //
 {
 	//ENodes enodes;
@@ -1659,7 +1659,7 @@ void ORAMtree::evict_Paths_KNNEA(unordered_map<string, TreeNode>& pathNodes, vec
 //	{
 //		stashArray.push_back(v.second);
 //	};
-	sort(stashArray.begin(), stashArray.end(), LessSortByLeaf);	//ÏÈ½«stashÖĞµÄÎïÌå°´ÕÕÒ¶×ÓÎ»ÖÃÅÅĞò£¬´ÓĞ¡µ½´ó
+	sort(stashArray.begin(), stashArray.end(), LessSortByLeaf);	//å…ˆå°†stashä¸­çš„ç‰©ä½“æŒ‰ç…§å¶å­ä½ç½®æ’åºï¼Œä»å°åˆ°å¤§
 	for (int i = P.L; i >= 1; i--)
 	{
 		for (auto leaf : leafs)
@@ -1672,16 +1672,16 @@ void ORAMtree::evict_Paths_KNNEA(unordered_map<string, TreeNode>& pathNodes, vec
 			//ENode enode;
 			CPath64 currentLeaf(leaf);
 			string path = currentLeaf.AtLevelPath(i);
-			//if (enodes.find(path) != enodes.end()) continue;//ÒÑ¾­ÌîºÃÕâ¸ö½ÚµãµÄÊı¾İÁË È¥³ıÖØ¸´
-			node = pathNodes[path];//¶ÁÈ¡
+			//if (enodes.find(path) != enodes.end()) continue;//å·²ç»å¡«å¥½è¿™ä¸ªèŠ‚ç‚¹çš„æ•°æ®äº† å»é™¤é‡å¤
+			node = pathNodes[path];//è¯»å–
 			vector<Slot> Z_results;
 			if (i > 1)
 			{
-				FindZNearbySlotFromVector(stashArray, leaf, Z_results, P.Z * 2);//×óÓÒ¸÷Z¸öÔªËØ ²»ÄÜÖ»ÓĞZ¸öÔªËØ
+				FindZNearbySlotFromVector(stashArray, leaf, Z_results, P.Z * 2);//å·¦å³å„Zä¸ªå…ƒç´  ä¸èƒ½åªæœ‰Zä¸ªå…ƒç´ 
 			}
 			else
 			{
-				Z_results = stashArray;//½«ËùÓĞµÄ½Úµã²åÈë¸ù²¿
+				Z_results = stashArray;//å°†æ‰€æœ‰çš„èŠ‚ç‚¹æ’å…¥æ ¹éƒ¨
 			}
 			for (auto& v : Z_results)
 			{
@@ -1698,23 +1698,23 @@ void ORAMtree::evict_Paths_KNNEA(unordered_map<string, TreeNode>& pathNodes, vec
 					if (node.slots.size() < P.Z)
 					{
 						node.slots.push_back(v);
-						DeleteOneSlotFromVector(stashArray, v);//É¾³ıËã·¨ÏûºÄµÄÊ±¼äÌ«¶à
-						stash.erase(v.key);//Ö±½ÓÉ¾³ı
+						DeleteOneSlotFromVector(stashArray, v);//åˆ é™¤ç®—æ³•æ¶ˆè€—çš„æ—¶é—´å¤ªå¤š
+						stash.erase(v.key);//ç›´æ¥åˆ é™¤
 					}
 					else
 					{
-						break;//½ÚµãÂú
+						break;//èŠ‚ç‚¹æ»¡
 					}
 				}
 			}
 			//int max = P.Z;
 			//if (i == 1) max = P.S;
-			//for (auto v : node.slots)//É¾³ıÒÑ¾­Ê¹ÓÃÁËµÄ¿é
+			//for (auto v : node.slots)//åˆ é™¤å·²ç»ä½¿ç”¨äº†çš„å—
 			//{
-			//	DeleteOneSlotFromVector(stashArray, v);//É¾³ıËã·¨ÏûºÄµÄÊ±¼äÌ«¶à
+			//	DeleteOneSlotFromVector(stashArray, v);//åˆ é™¤ç®—æ³•æ¶ˆè€—çš„æ—¶é—´å¤ªå¤š
 			//	stash.erase(v.key);
 			//}
-			//while (node.slots.size() < max) //¶ÔÆë ²»¶ÔÆëÁË Áôµ½×îºó¼ÓÃÜµÄÊ±ºòÈ¥¶ÔÆë
+			//while (node.slots.size() < max) //å¯¹é½ ä¸å¯¹é½äº† ç•™åˆ°æœ€ååŠ å¯†çš„æ—¶å€™å»å¯¹é½
 			//{
 			//	Slot empty = { 0 };
 			//	empty.value = EmptyBlock();
@@ -1729,19 +1729,19 @@ void ORAMtree::evict_Paths_KNNEA(unordered_map<string, TreeNode>& pathNodes, vec
 			//		P.n_root_exceed_S++;
 			//		if (node.slots.size()> P.Max_S)
 			//		{
-			//			P.Max_S = node.slots.size();//Òç³öµÄ×î´óÖµ
+			//			P.Max_S = node.slots.size();//æº¢å‡ºçš„æœ€å¤§å€¼
 			//		}
 					//printf("\r\n exceed S root_size=%d", node.slots.size());
 			//	}
 			}
 			//enode = EncryptNode(node);
 			//enodes[node.path] = enode;
-			pathNodes[node.path] = node;//±£´æ
+			pathNodes[node.path] = node;//ä¿å­˜
 		}
 	}
 }
 
-//KNNEA Ëã·¨
+//KNNEA ç®—æ³•
 void ORAMtree::evict_Paths_KNNEA(unordered_map<string,TreeNode>& pathNodes,vector<ull>& leafs) //
 {
 	//ENodes enodes;
@@ -1751,7 +1751,7 @@ void ORAMtree::evict_Paths_KNNEA(unordered_map<string,TreeNode>& pathNodes,vecto
 	{
 		stashArray.push_back(v.second);
 	};
-	sort(stashArray.begin(), stashArray.end(), LessSortByLeaf);	//ÏÈ½«stashÖĞµÄÎïÌå°´ÕÕÒ¶×ÓÎ»ÖÃÅÅĞò£¬´ÓĞ¡µ½´ó
+	sort(stashArray.begin(), stashArray.end(), LessSortByLeaf);	//å…ˆå°†stashä¸­çš„ç‰©ä½“æŒ‰ç…§å¶å­ä½ç½®æ’åºï¼Œä»å°åˆ°å¤§
 	for (int i = P.L; i >= 1; i--)
 	{
 		for (auto leaf : leafs)
@@ -1764,10 +1764,10 @@ void ORAMtree::evict_Paths_KNNEA(unordered_map<string,TreeNode>& pathNodes,vecto
 			//ENode enode;
 			CPath64 currentLeaf(leaf);
 			string path = currentLeaf.AtLevelPath(i);
-			//if (enodes.find(path) != enodes.end()) continue;//ÒÑ¾­ÌîºÃÕâ¸ö½ÚµãµÄÊı¾İÁË È¥³ıÖØ¸´
-			node = pathNodes[path];//¶ÁÈ¡
+			//if (enodes.find(path) != enodes.end()) continue;//å·²ç»å¡«å¥½è¿™ä¸ªèŠ‚ç‚¹çš„æ•°æ®äº† å»é™¤é‡å¤
+			node = pathNodes[path];//è¯»å–
 			vector<Slot> Z_results;
-			FindZNearbySlotFromVector(stashArray, leaf, Z_results, P.Z * 2);//×óÓÒ¸÷Z¸öÔªËØ ²»ÄÜÖ»ÓĞZ¸öÔªËØ	
+			FindZNearbySlotFromVector(stashArray, leaf, Z_results, P.Z * 2);//å·¦å³å„Zä¸ªå…ƒç´  ä¸èƒ½åªæœ‰Zä¸ªå…ƒç´ 	
 			for (auto& v : Z_results)
 			{
 				//	int level = path64.Cross(leaf, v.second.leaf).GetLevel();
@@ -1783,23 +1783,23 @@ void ORAMtree::evict_Paths_KNNEA(unordered_map<string,TreeNode>& pathNodes,vecto
 						if (node.slots.size() < P.Z)
 						{
 							node.slots.push_back(v);
-							DeleteOneSlotFromVector(stashArray, v);//É¾³ıËã·¨ÏûºÄµÄÊ±¼äÌ«¶à
-							stash.erase(v.key);//Ö±½ÓÉ¾³ı
+							DeleteOneSlotFromVector(stashArray, v);//åˆ é™¤ç®—æ³•æ¶ˆè€—çš„æ—¶é—´å¤ªå¤š
+							stash.erase(v.key);//ç›´æ¥åˆ é™¤
 						}
 						else
 						{
-							break;//½ÚµãÂú
+							break;//èŠ‚ç‚¹æ»¡
 						}
 				}
 			}
 			//int max = P.Z;
 			//if (i == 1) max = P.S;
-			//for (auto v : node.slots)//É¾³ıÒÑ¾­Ê¹ÓÃÁËµÄ¿é
+			//for (auto v : node.slots)//åˆ é™¤å·²ç»ä½¿ç”¨äº†çš„å—
 			//{
-			//	DeleteOneSlotFromVector(stashArray, v);//É¾³ıËã·¨ÏûºÄµÄÊ±¼äÌ«¶à
+			//	DeleteOneSlotFromVector(stashArray, v);//åˆ é™¤ç®—æ³•æ¶ˆè€—çš„æ—¶é—´å¤ªå¤š
 			//	stash.erase(v.key);
 			//}
-		//	while (node.slots.size() < max) //¶ÔÆë //ÔİÊ±²»¶ÔÆë
+		//	while (node.slots.size() < max) //å¯¹é½ //æš‚æ—¶ä¸å¯¹é½
 		//	{
 		//		Slot empty = { 0 };
 		//		empty.value = EmptyBlock();
@@ -1814,25 +1814,25 @@ void ORAMtree::evict_Paths_KNNEA(unordered_map<string,TreeNode>& pathNodes,vecto
 			//		P.n_root_exceed_S++;
 			//		if (node.slots.size()> P.Max_S)
 			//		{
-			//			P.Max_S = node.slots.size();//Òç³öµÄ×î´óÖµ
+			//			P.Max_S = node.slots.size();//æº¢å‡ºçš„æœ€å¤§å€¼
 			//		}
 					//printf("\r\n exceed S root_size=%d", node.slots.size());
 			//	}
 			}
 			//enode = EncryptNode(node);
 			//enodes[node.path] = enode;
-			pathNodes[node.path] = node;//±£´æ
+			pathNodes[node.path] = node;//ä¿å­˜
 		}
 	}
 }
 
-//¼ÆËã³õÊ¼µÄÒ¶×ÓÎ»ÖÃ
+//è®¡ç®—åˆå§‹çš„å¶å­ä½ç½®
 //ulong ORAMtree::GetInitialPos(Slot& s)
 //{
 //	return firstLeafID + (*(ulong*)&s.key) % leafCount;
 //}
-//³õÊ¼»¯µÄ·½Ê½¹¹ÔìÒ»¿ÃÊ÷ £¨Ä¬ÈÏÊÇ²åÈëÒ¶×Ó½Úµã£¬Èç¹ûÒ¶×Ó½ÚµãÂúÁË¾ÍÁôÔÚstashÖ®ÖĞ£©£©
-//Ã¿Ò»¸ötreenode ÓĞ Z¸ö Slot
+//åˆå§‹åŒ–çš„æ–¹å¼æ„é€ ä¸€æ£µæ ‘ ï¼ˆé»˜è®¤æ˜¯æ’å…¥å¶å­èŠ‚ç‚¹ï¼Œå¦‚æœå¶å­èŠ‚ç‚¹æ»¡äº†å°±ç•™åœ¨stashä¹‹ä¸­ï¼‰ï¼‰
+//æ¯ä¸€ä¸ªtreenode æœ‰ Zä¸ª Slot
 ENodes ORAMtree::RebuildPaths_initial() //
 {
 	ENodes enodes;
@@ -1850,7 +1850,7 @@ ENodes ORAMtree::RebuildPaths_initial() //
 //		stashArray.push_back(v.second);
 //	};
 // 
-//	sort(stashArray.begin(), stashArray.end(), LessSortByLeaf);	//ÏÈ½«stashÖĞµÄÎïÌå°´ÕÕÒ¶×ÓÎ»ÖÃÅÅĞò£¬´ÓĞ¡µ½´ó
+//	sort(stashArray.begin(), stashArray.end(), LessSortByLeaf);	//å…ˆå°†stashä¸­çš„ç‰©ä½“æŒ‰ç…§å¶å­ä½ç½®æ’åºï¼Œä»å°åˆ°å¤§
 //	for (int i = L; i >= 1; i--)
 //	{	 
 		for (auto& v : stash)
@@ -1868,14 +1868,14 @@ ENodes ORAMtree::RebuildPaths_initial() //
 			else
 			{
 				//node.slots.push_back(v.second);
-				tempStash[v.first] = v.second;//±£Áô£¬Ã»ÓĞ±»ÇıÖğ³É¹¦£¬·Å±¾µØ»º³åÇø
+				tempStash[v.first] = v.second;//ä¿ç•™ï¼Œæ²¡æœ‰è¢«é©±é€æˆåŠŸï¼Œæ”¾æœ¬åœ°ç¼“å†²åŒº
 			}		
 			pathNodes[path] = node;
 		}
 		for (auto& v : pathNodes)
 		{
 			TreeNode node = v.second;			
-			while (node.slots.size() < P.Z) //¶ÔÆë
+			while (node.slots.size() < P.Z) //å¯¹é½
 			{
 				Slot empty = { 0 };
 				empty.value = EmptyBlock();
@@ -1884,12 +1884,12 @@ ENodes ORAMtree::RebuildPaths_initial() //
 			ENode enode = EncryptNode(node);
 			enodes[node.path] = enode;
 		}
-		stash = tempStash;//¸²¸ÇÔ­À´µÄ
+		stash = tempStash;//è¦†ç›–åŸæ¥çš„
 	//}
 	//*/
 	return enodes;
 }
-//¼ÙÉèÊı¾İÒÑ¾­¶¼ÔÚstashÖĞÁË£¬×¼±¸Ï´ÅÆ //ÀÏËã·¨
+//å‡è®¾æ•°æ®å·²ç»éƒ½åœ¨stashä¸­äº†ï¼Œå‡†å¤‡æ´—ç‰Œ //è€ç®—æ³•
 ENodes ORAMtree::RebuildPathsOld(vector<ull>& leafs)
 {
 	ENodes enodes;
@@ -1902,7 +1902,7 @@ ENodes ORAMtree::RebuildPathsOld(vector<ull>& leafs)
 			ENode enode;
 			CPath64 currentLeaf(leaf);
 			string path = currentLeaf.AtLevelPath(i);
-			if (enodes.find(path) != enodes.end()) continue;//ÒÑ¾­ÌîºÃÕâ¸ö½ÚµãµÄÊı¾İÁË È¥³ıÖØ¸´
+			if (enodes.find(path) != enodes.end()) continue;//å·²ç»å¡«å¥½è¿™ä¸ªèŠ‚ç‚¹çš„æ•°æ®äº† å»é™¤é‡å¤
 			for (auto v : stash)
 			{
 				//	if (v.second.value.data == 99)
@@ -1924,7 +1924,7 @@ ENodes ORAMtree::RebuildPathsOld(vector<ull>& leafs)
 						}
 						else
 						{
-							break;//½ÚµãÂú
+							break;//èŠ‚ç‚¹æ»¡
 						}
 					}
 					else
@@ -1935,18 +1935,18 @@ ENodes ORAMtree::RebuildPathsOld(vector<ull>& leafs)
 						}
 						else
 						{
-							break;//½ÚµãÂú
+							break;//èŠ‚ç‚¹æ»¡
 						}
 					}
 				}
 			}
 			int max = P.Z;
 			if (i == 1) max = P.S;
-			for (auto v : node.slots)//É¾³ıÒÑ¾­Ê¹ÓÃÁËµÄ¿é
+			for (auto v : node.slots)//åˆ é™¤å·²ç»ä½¿ç”¨äº†çš„å—
 			{
 				stash.erase(v.key);
 			}
-			while (node.slots.size() < max) //¶ÔÆë
+			while (node.slots.size() < max) //å¯¹é½
 			{
 				Slot empty = { 0 };
 				empty.value=EmptyBlock();
@@ -1986,10 +1986,10 @@ ull ORAMtree::SearchToken(string w, ull i, ull w_searchtimes)
 	myhash::Blake2b(input, total, output);
 	ull leafid = *(ull *)&output;
 	ull M = pow(2, P.L-1);
-	leafid = leafid % M;//´Ó×ó±ß¿ªÊ¼ÊıµÄÒ¶×Ó±àºÅ
+	leafid = leafid % M;//ä»å·¦è¾¹å¼€å§‹æ•°çš„å¶å­ç¼–å·
 	CPath64 p;
 	p.LoadLeaf(P.L, leafid);
-	return p.value;//·µ»ØÒ¶×Ó½Úµã±àºÅ£¨²»ÊÇÒ¶×Ó±àºÅ£©
+	return p.value;//è¿”å›å¶å­èŠ‚ç‚¹ç¼–å·ï¼ˆä¸æ˜¯å¶å­ç¼–å·ï¼‰
 }
 
 TreeNode ORAMtree::DecryptNode(ENode e)
@@ -2013,7 +2013,7 @@ TreeNode ORAMtree::DecryptNode(ENode e)
 		if (d.slots.size() < outBlock)
 		{
 			Slot r = { 0 };
-			d.slots.push_back(r);//À©´óÌå»ı
+			d.slots.push_back(r);//æ‰©å¤§ä½“ç§¯
 		}
 		memcpy(&d.slots[i], plaintext +  i * sizeof(Slot), sizeof(Slot));
 	}
@@ -2051,6 +2051,7 @@ ENode ORAMtree::EncryptNode(TreeNode d)
 	{
 		ed.bytes.push_back(output[i]);
 	}
+	free(m);
 	free(output);
 
 	return ed;
@@ -2084,14 +2085,14 @@ void ORAMtree::WriteIntoStash(ENodes enodes)
 		TreeNode d = DecryptNode(v.second);
 		for (auto& s : d.slots)
 		{
-			if (isEmptyBlock(s.value)) continue;//¿ÕÊı¾İ¿é
-			stash[s.key] = s; //ÕâÀïÊÇ·ñ´æÔÚ¸²¸ÇÔ­À´µÄÊı¾İµÄ¿ÉÄÜ£¿
-		//	w_block_count--;//·şÎñÆ÷ÉÏµÄ ·Ç¿ÕÊı¾İ¿é±»È¡³öÀ´ÁË
+			if (isEmptyBlock(s.value)) continue;//ç©ºæ•°æ®å—
+			stash[s.key] = s; //è¿™é‡Œæ˜¯å¦å­˜åœ¨è¦†ç›–åŸæ¥çš„æ•°æ®çš„å¯èƒ½ï¼Ÿ
+		//	w_block_count--;//æœåŠ¡å™¨ä¸Šçš„ éç©ºæ•°æ®å—è¢«å–å‡ºæ¥äº†
 		}
 	}
 }
 
-//Ö±½Ó½«³õÊ¼»¯µÄÊı¾İĞ´Èëstash
+//ç›´æ¥å°†åˆå§‹åŒ–çš„æ•°æ®å†™å…¥stash
 void ORAMtree::LocalInsert(vector<Slot> blocks)
 {
 	for (auto& v : blocks)
@@ -2145,14 +2146,14 @@ ENodes ORAMtree::ReadPaths(vector<ull> leafs)
 				ENode empty;
 				empty.path = path;
 				empty.level = p.GetLevel();
-				nodes[path] = empty;//²åÈë¿Õ½Úµã
+				nodes[path] = empty;//æ’å…¥ç©ºèŠ‚ç‚¹
 				if (p.value == 0) break;
 				p = p.Father();
 				continue;
 			}
 			ENode n = oram[path];
 		//	ENode empty0;
-		//	oram[path] = empty0;//ÇåÁã
+		//	oram[path] = empty0;//æ¸…é›¶
 			nodes[path] = n;
 			debug.readBytes += n.bytes.size() + 8;
 			if (p.value == 0) break;
@@ -2170,7 +2171,7 @@ void ORAMtree::writePath(ENodes nodes)
 	}
 	for (auto v : nodes)
 	{
-		P.band_width += v.second.bytes.size() + 8;//8¸ö×Ö½ÚÓÃÓÚ±íÊ¾ node idenfier
+		P.band_width += v.second.bytes.size() + 8;//8ä¸ªå­—èŠ‚ç”¨äºè¡¨ç¤º node idenfier
 	}
 	if (P.max_S < stash.size()) P.max_S = stash.size();
 }
@@ -2391,17 +2392,17 @@ void ORAMtree::save()
 	for (auto& v : localMap)
 	{
 		string w = v.first;
-		char str[MAX_KEYWORD_LENGTH+1] = { 0 };// ¼ÙÉè×Ö·û´®×î¶àÊÇ31 ¸ö×Ö½Ú
+		char str[MAX_KEYWORD_LENGTH+1] = { 0 };// å‡è®¾å­—ç¬¦ä¸²æœ€å¤šæ˜¯31 ä¸ªå­—èŠ‚
 		int c = w.length();
 		if (c > MAX_KEYWORD_LENGTH) c = MAX_KEYWORD_LENGTH;
 		strncpy(str, w.c_str(), c);
 		//strcpy_s(str, MAX_KEYWORD_LENGTH+1, w.c_str());
-		fwrite(str, sizeof(str), 1, fp2);//Ğ´Èë×Ö·û´®
+		fwrite(str, sizeof(str), 1, fp2);//å†™å…¥å­—ç¬¦ä¸²
 		fwrite(&v.second, sizeof(KeywordInfo), 1, fp2);
 	}
 	fclose(fp2);
 
-	FILE* fp3 = fopen("stash.bin", "wb+");//´æ´¢¶ÑÕ»µÄĞÅÏ¢
+	FILE* fp3 = fopen("stash.bin", "wb+");//å­˜å‚¨å †æ ˆçš„ä¿¡æ¯
 	for (auto& v : stash)
 	{
 		IndexKey w = v.first;
@@ -2441,15 +2442,15 @@ void ORAMtree::load()
 		localMap.clear();
 		while (!feof(fp2))
 		{
-			char str[MAX_KEYWORD_LENGTH + 1] = { 0 };// ¼ÙÉè×Ö·û´®×î¶àÊÇ31 ¸ö×Ö½Ú
-			fread(str, sizeof(str), 1, fp2);//Ğ´Èë×Ö·û´®
+			char str[MAX_KEYWORD_LENGTH + 1] = { 0 };// å‡è®¾å­—ç¬¦ä¸²æœ€å¤šæ˜¯31 ä¸ªå­—èŠ‚
+			fread(str, sizeof(str), 1, fp2);//å†™å…¥å­—ç¬¦ä¸²
 			KeywordInfo info;
 			fread(&info, sizeof(KeywordInfo), 1, fp2);
 			localMap[str] = info;
 		}
 		fclose(fp2);
 	};
-	FILE* fp3 = fopen("stash.bin", "rb");//´æ´¢¶ÑÕ»µÄĞÅÏ¢
+	FILE* fp3 = fopen("stash.bin", "rb");//å­˜å‚¨å †æ ˆçš„ä¿¡æ¯
 	if (fp3)
 	{
 		stash.clear();
